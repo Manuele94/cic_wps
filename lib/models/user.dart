@@ -27,16 +27,16 @@ class User {
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
       username: parsedJson["d"]["ZUSERNAME"],
-      app: parsedJson["d"]["ZAPP"],
-      company: parsedJson["d"]["ZSOCIETA"],
-      surname: parsedJson["d"]["ZCOGNOME"],
-      name: parsedJson["d"]["ZNOME"],
-      region: parsedJson["d"]["ZREGIONE"],
-      office: parsedJson["d"]["ZSEDE"],
+      app:      parsedJson["d"]["ZAPP"],
+      company:  parsedJson["d"]["ZSOCIETA"],
+      surname:  parsedJson["d"]["ZCOGNOME"],
+      name:     parsedJson["d"]["ZNOME"],
+      region:   parsedJson["d"]["ZREGIONE"],
+      office:   parsedJson["d"]["ZSEDE"],
       password: parsedJson["d"]["ZPASSWORD"],
-      s_user: parsedJson["d"]["ZSUPER_USER"],
+      s_user:   parsedJson["d"]["ZSUPER_USER"],
       osSystem: parsedJson["d"]["ZOS_CHIAMANTE"],
-      version: parsedJson["d"]["ZVERSIONE"],
+      version:  parsedJson["d"]["ZVERSIONE"],
     );
   }
 

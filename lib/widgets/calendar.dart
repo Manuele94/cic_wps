@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
-  Calendar({Key key}) : super(key: key);
+  // Calendar({Key key}) : super(key: key);
+  CalendarFormat calendarFormat;
+
+  Calendar(this.calendarFormat);
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -46,7 +49,10 @@ class _CalendarState extends State<Calendar> {
               color: Theme.of(context).iconTheme.color),
           formatButtonVisible: false,
         ),
-        availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+        availableCalendarFormats: {
+          widget.calendarFormat: _getCalendarFormatString(widget.calendarFormat)
+        },
+        initialCalendarFormat: widget.calendarFormat,
         events: _events,
         onDaySelected: (date, events) {
           setState(() {
@@ -58,5 +64,21 @@ class _CalendarState extends State<Calendar> {
         endDay: _nowDate.add(Duration(days: 30)),
       ),
     );
+  }
+
+  String _getCalendarFormatString(CalendarFormat cF) {
+    switch (cF) {
+      case CalendarFormat.month:
+        return 'Month';
+        break;
+      case CalendarFormat.week:
+        return 'Week';
+        break;
+      case CalendarFormat.twoWeeks:
+        return '2 weeks';
+        break;
+      default:
+        return 'Month';
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cic_wps/widgets/eventTable.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:table_calendar/table_calendar.dart';
 import './profilePage.dart';
 import './eventDetailPage.dart';
 import '../widgets/calendar.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
 
   static const routeName = '/HomePage';
+  static const calendarFormat = CalendarFormat.month;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Calendar(),
+                Calendar(calendarFormat),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(

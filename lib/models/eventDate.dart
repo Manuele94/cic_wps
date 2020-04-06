@@ -17,19 +17,19 @@ class EventDate {
 
   factory EventDate.fromJson(Map<String, dynamic> parsedJson) {
     return new EventDate(
-      note: parsedJson["ZNOTE"],
-      user: parsedJson["ZUSERNAME"],
-      date: parsedJson["ZDATA"],
-      holiday: parsedJson["ZFESTIVO"],
-      location: parsedJson["ZLUOGO"],
+      note:       parsedJson["ZNOTE"],
+      user:       parsedJson["ZUSERNAME"],
+      date:       parsedJson["ZDATA"],
+      holiday:    parsedJson["ZFESTIVO"],
+      location:   parsedJson["ZLUOGO"],
       motivation: parsedJson["ZCAUSALE"],
     );
   }
 
-  String get getNote => note;
-  String get getUser => user;
-  String get getDate => date;
-  String get getHoliday => holiday;
-  String get getLocation => location;
+  String get getNote       => note;
+  String get getUser       => user;
+  String get getDate       => date;
+  String get getHoliday    => holiday;
+  String get getLocation   => location;
   String get getMotivation => motivation;
 }
