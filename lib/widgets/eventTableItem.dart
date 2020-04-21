@@ -1,47 +1,91 @@
+import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+
+import 'package:line_icons/line_icons.dart';
 
 class EventTableItem extends StatelessWidget {
-  final String eventType;
-  final String location;
-  final String description;
+  final CalendarEvent event;
   void selectItem() {}
 
-  EventTableItem(
-      {@required this.eventType,
-      @required this.location,
-      @required this.description});
+  EventTableItem({@required this.event});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => selectItem(),
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              eventType,
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              location,
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              description,
-              textAlign: TextAlign.left,
-            ),
-          ],
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: InkWell(
+        onTap: () => selectItem(),
+        child: Container(
+          padding: const EdgeInsets.all(17),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Icon(event.getIconByMotivation(), color: Colors.white),
+              SizedBox(
+                width: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    event.getTextByMotivation(),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                  Text(
+                    event.getLocation,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500, color: Colors.white),
+                  ),
+                  Text(
+                    event.getNote,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Icon(LineIcons.ellipsis_v, color: Colors.white),
+            ],
+          ),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                event.getColorByMotivation(),
+                event.getColorByMotivation().withOpacity(0.5)
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.circular(10)),
         ),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Theme.of(context).accentColor,
-              Theme.of(context).primaryColor,
-            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            borderRadius: BorderRadius.circular(15)),
       ),
     );
   }
+
+  // List<Color> _randomColor() {
+  //   final baseColors = [
+  //     Colors.blueAccent,
+  //     Colors.redAccent,
+  //     Colors.deepPurpleAccent,
+  //     Colors.deepOrangeAccent,
+  //     Colors.indigoAccent,
+  //   ];
+
+  //   final randomIndex = Random().nextInt(baseColors.length);
+  //   return [baseColors[randomIndex], baseColors[randomIndex].withOpacity(0.7)];
+  // }
+
+  // List<Color> _randomColor(BuildContext ctx, CalendarEvent event) {
+  //   // final baseColors = [Theme.of(ctx).primaryColor, Theme.of(ctx).accentColor];
+  //   // final baseColors = event.getColorByMotivation();
+
+  //   // // final randomIndex = Random().nextInt(baseColors.length);
+  //   // return [baseColors[randomIndex], baseColors[randomIndex].withOpacity(0.5)];
+  // }
+
 }

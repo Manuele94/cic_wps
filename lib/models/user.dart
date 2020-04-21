@@ -6,10 +6,10 @@ class User {
   final String name;
   final String region;
   final String office;
-  String password;
-  final bool s_user;
+  final bool sUser;
   final String osSystem;
   final String version;
+  String password;
 
   User(
       {this.username,
@@ -20,23 +20,23 @@ class User {
       this.region,
       this.office,
       this.password,
-      this.s_user,
+      this.sUser,
       this.osSystem,
       this.version});
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
       username: parsedJson["d"]["ZUSERNAME"],
-      app:      parsedJson["d"]["ZAPP"],
-      company:  parsedJson["d"]["ZSOCIETA"],
-      surname:  parsedJson["d"]["ZCOGNOME"],
-      name:     parsedJson["d"]["ZNOME"],
-      region:   parsedJson["d"]["ZREGIONE"],
-      office:   parsedJson["d"]["ZSEDE"],
+      app: parsedJson["d"]["ZAPP"],
+      company: parsedJson["d"]["ZSOCIETA"],
+      surname: parsedJson["d"]["ZCOGNOME"],
+      name: parsedJson["d"]["ZNOME"],
+      region: parsedJson["d"]["ZREGIONE"],
+      office: parsedJson["d"]["ZSEDE"],
       password: parsedJson["d"]["ZPASSWORD"],
-      s_user:   parsedJson["d"]["ZSUPER_USER"],
+      sUser: parsedJson["d"]["ZSUPER_USER"],
       osSystem: parsedJson["d"]["ZOS_CHIAMANTE"],
-      version:  parsedJson["d"]["ZVERSIONE"],
+      version: parsedJson["d"]["ZVERSIONE"],
     );
   }
 

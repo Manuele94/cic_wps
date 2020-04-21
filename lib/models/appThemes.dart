@@ -7,17 +7,14 @@ class AppTheme {
   static Color _appBarColor = Colors.transparent;
 
   static const Color _lightPrimarySwatch = Colors.blue;
-  static const Color _lightAccentColor = Colors.blueAccent;
-  // static const Color _lightPrimaryColor = Colors.white;
-  static const Color _lightPrimaryVariantColor = Color(0XFFE1E1E1);
-  // static const Color _lightSecondaryColor = Colors.green;
+  // static const Color _lightAccentColor = Colors.blueAccent;
+  static const Color _lightAccentColor = Color(0XFF1C5D99);
+  static const Color _lightPrimaryVariantColor = Color(0XFFFFFFFF);
   static const Color _lightOnPrimaryColor = Colors.black;
 
   static const Color _darkPrimarySwatch = Colors.red;
   static const Color _darkAccentColor = Colors.redAccent;
-  // static const Color _darkPrimaryColor = Colors.white24;
   static const Color _darkPrimaryVariantColor = Colors.black;
-  // static const Color _darkSecondaryColor = Colors.white;
   static const Color _darkOnPrimaryColor = Colors.white;
 
   static final TextStyle _lightScreenHeadingTextStyle =
@@ -37,8 +34,12 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: _lightPrimaryVariantColor,
     fontFamily: 'Raleway',
-    primarySwatch: _lightPrimarySwatch,
+    // primarySwatch: _lightPrimarySwatch,
+    primaryColor: Color(0XFF002D9C),
+    primaryColorLight: Color(0XFF1C5D99),
+    primaryColorDark: Color(0XFF1C5D99),
     accentColor: _lightAccentColor,
+    // cardColor: _lightOnPrimaryColor.withAlpha(60),
     appBarTheme: AppBarTheme(
       color: _appBarColor,
       iconTheme: IconThemeData(color: _lightOnPrimaryColor),
@@ -59,6 +60,7 @@ class AppTheme {
     scaffoldBackgroundColor: _darkPrimaryVariantColor,
     primarySwatch: _darkPrimarySwatch,
     accentColor: _darkAccentColor,
+    cardColor: Colors.blueGrey.withOpacity(0.7),
     fontFamily: 'Raleway',
     appBarTheme: AppBarTheme(
       color: _appBarColor,
