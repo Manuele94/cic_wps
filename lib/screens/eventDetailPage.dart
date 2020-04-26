@@ -1,10 +1,12 @@
+import 'dart:ui';
+
 import 'package:cic_wps/models/calendarEvent.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
+import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/attendanceTypeAb.dart';
 import 'package:cic_wps/utilities/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cic_wps/widgets/attendanceBTLocationsList.dart';
 import 'package:cic_wps/widgets/attendanceNoteForm.dart';
@@ -35,6 +37,7 @@ class EventDetailPage extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: _eventToModify,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
@@ -63,89 +66,90 @@ class EventDetailPage extends StatelessWidget {
               ],
             ),
             SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Calendar(calendarFormat),
-                  Visibility(
-                    visible: _selectedDay.isBefore(_nowDate),
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Calendar(calendarFormat),
+                Visibility(
+                  visible: _selectedDay.isBefore(_nowDate),
+                  child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                       child: Text(
                         "Changes in the past are not allowed",
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  AttendanceTypeRow(),
-                  SizedBox(height: 10),
-                  Consumer<CalendarEvent>(
-                    builder: (_, eventToModify, __) => Column(
-                      children: <Widget>[
-                        Visibility(
-                          visible: _changeLocationVisibility(eventToModify),
-                          child: AttendanceBTLocationsList(),
-                        ),
-                        Visibility(
-                            visible: _changeNoteVisibility(eventToModify),
-                            child: AttendanceNoteForm()),
-                      ],
+                  replacement: Column(children: <Widget>[
+                    SizedBox(height: 10),
+                    AttendanceTypeRow(),
+                    SizedBox(height: 10),
+                    Consumer<CalendarEvent>(
+                      builder: (_, eventToModify, __) => Column(
+                        children: <Widget>[
+                          Visibility(
+                            visible: _changeLocationVisibility(eventToModify),
+                            child: AttendanceBTLocationsList(),
+                          ),
+                          Visibility(
+                              visible: _changeNoteVisibility(eventToModify),
+                              child: AttendanceNoteForm()),
+                        ],
+                      ),
                     ),
-                  ),
-                  // AttendanceActionRow(
-                  //   eventModified: _eventToModify,
-                  //   save: _modifyEvent,
-                  //   delete: _deleteEvent,
-                  // )
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(height: 15),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Card(
-                              shadowColor: Theme.of(context).accentColor,
-                              elevation: 2,
-                              child: FlatButton(
-                                onPressed: (_deleteConditions(
-                                        _selectedDay, _eventToModify))
-                                    ? () => _deleteEvent(_eventsProvider,
-                                        _selectedDay, _eventToModify, context)
-                                    : null,
-                                child: Text(
-                                  "Delete Day",
-                                ),
-                                textColor: Colors.red,
-                                disabledTextColor: Colors.grey,
-                              ),
-                            ),
-                            Consumer<CalendarEvent>(
-                              builder: (_, eventToModify, __) => Card(
+                    Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        SizedBox(height: 15),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Card(
                                 shadowColor: Theme.of(context).accentColor,
                                 elevation: 2,
                                 child: FlatButton(
-                                  onPressed: (_saveConditions(
-                                          _selectedDay, eventToModify))
-                                      ? () => _modifyEvent(_eventsProvider,
-                                          _selectedDay, eventToModify, context)
+                                  onPressed: (_deleteConditions(
+                                          _selectedDay, _eventToModify))
+                                      ? () => _deleteEvent(_eventsProvider,
+                                          _selectedDay, _eventToModify, context)
                                       : null,
                                   child: Text(
-                                    "Save Day",
+                                    "Delete Day",
                                   ),
-                                  textColor: Colors.green,
+                                  textColor: Colors.red,
                                   disabledTextColor: Colors.grey,
                                 ),
                               ),
-                            ),
-                          ]),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                              Consumer<CalendarEvent>(
+                                builder: (_, eventToModify, __) => Card(
+                                  shadowColor: Theme.of(context).accentColor,
+                                  elevation: 2,
+                                  child: FlatButton(
+                                    onPressed: (_saveConditions(
+                                            _selectedDay, eventToModify))
+                                        ? () => _modifyEvent(
+                                            _eventsProvider,
+                                            _selectedDay,
+                                            eventToModify,
+                                            context)
+                                        : null,
+                                    child: Text(
+                                      "Save Day",
+                                    ),
+                                    textColor: Colors.green,
+                                    disabledTextColor: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ],
+                    ),
+                  ]),
+                )
+              ],
+            )),
           ],
         ),
       ),
@@ -159,7 +163,7 @@ class EventDetailPage extends StatelessWidget {
       return CalendarEvent(
           note: '',
           user: '',
-          date: selectedDay.toString(),
+          date: selectedDay.toString().substring(0, 10).replaceAll('-', ''),
           holiday: '',
           location: '',
           motivation: '');
@@ -187,14 +191,23 @@ class EventDetailPage extends StatelessWidget {
 
   Future<void> _modifyEvent(CalendarEvents provider, DateTime selDay,
       CalendarEvent modifiedEvent, BuildContext ctx) async {
-    startLoadingSpinner(ctx);
-    try {
-      await provider.modifyEventInEvents(selDay, modifiedEvent);
-      Navigator.pop(ctx);
-      SnackBarMessage.successfullyAttendanceUpload(ctx);
-    } catch (onError) {
-      Navigator.pop(ctx);
-      SnackBarMessage.genericError(ctx, onError.toString());
+    if (modifiedEvent.getLocation.isNotEmpty) {
+      startLoadingSpinner(ctx);
+      try {
+        var resp = await provider.modifyEventInEvents(selDay, modifiedEvent);
+        if (resp) {
+          Navigator.pop(ctx);
+          SnackBarMessage.successfullyAttendanceUpload(ctx);
+        } else {
+          Navigator.pop(ctx);
+          SnackBarMessage.genericError(ctx, "Something went wrong!");
+        }
+      } catch (onError) {
+        Navigator.pop(ctx);
+        SnackBarMessage.genericError(ctx, onError.toString());
+      }
+    } else {
+      SnackBarMessage.genericError(ctx, "Please specify the location fields");
     }
   }
 
@@ -202,9 +215,14 @@ class EventDetailPage extends StatelessWidget {
       CalendarEvent modifiedEvent, BuildContext ctx) async {
     startLoadingSpinner(ctx);
     try {
-      await provider.deleteEventInEvents(selDay, modifiedEvent);
-      Navigator.pop(ctx);
-      SnackBarMessage.successfullyAttendanceDeleted(ctx);
+      var resp = await provider.deleteEventInEvents(selDay, modifiedEvent);
+      if (resp) {
+        Navigator.pop(ctx);
+        SnackBarMessage.successfullyAttendanceDeleted(ctx);
+      } else {
+        Navigator.pop(ctx);
+        SnackBarMessage.genericError(ctx, "Something went wrong!");
+      }
     } catch (onError) {
       Navigator.pop(ctx);
       SnackBarMessage.genericError(ctx, onError.toString());
@@ -225,7 +243,8 @@ class EventDetailPage extends StatelessWidget {
               "Upload",
             ),
             onPressed: () {
-              //  _uploadConfirmation(_nowDate,'VALID');
+              _uploadWeekConfirmation(context);
+
               Navigator.of(context).pop();
             },
           ),
@@ -264,6 +283,31 @@ class EventDetailPage extends StatelessWidget {
       return false;
     } else {
       return true;
+    }
+  }
+
+  Future<void> _uploadWeekConfirmation(BuildContext ctx) async {
+    var date = _nowDate.toString().substring(0, 10).replaceAll('-', '');
+    var confirmation = CalendarEvent(
+      date: date,
+      holiday: "",
+      location: "",
+      motivation: "VALID",
+      note: "",
+      user: "",
+    );
+
+    try {
+      var response = await NetworkManager().postAttendance(confirmation);
+      if (response) {
+        Navigator.pop(ctx);
+        SnackBarMessage.successfullyAttendanceUpload(ctx);
+      } else {
+        Navigator.pop(ctx);
+        SnackBarMessage.genericError(ctx, "Something went wrong!");
+      }
+    } catch (e) {
+      SnackBarMessage.genericError(ctx, e.toString());
     }
   }
 }

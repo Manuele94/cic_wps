@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cic_wps/models/calendarEvent.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:cic_wps/singleton/dbManager.dart';
+import 'package:cic_wps/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -51,13 +52,41 @@ class NetworkManager {
     }
   }
 
+  Future<http.Response> getForLogin(Map<String, String> _authData) async {
+    // final dbUser = await DbManager.getData("user");
+    // final user = dbUser.first["username"]; //TODO
+    // var url = "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set(ZUSERNAME='${_authData["username"]}',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers')";
+    // var url =
+    //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set?\$filter=ZUSERNAME%20eq%20'${_authData["username"]}'%20and%20ZAPP%20eq%20'WORKPLACE_STATUS?\$format=json')";
+    var user = _authData["id"];
+    var psw = _authData["psw"];
+    var url =
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/LoginSet(ZUSERNAME='$user',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers',ZPASSWORD='$psw')";
+    // var url =
+    //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set_2?\$filter=ZUSERNAME%20eq%20'$user'%20and%ZAPP%20eq%20'WORKPLACE_STATUS'%20and%ZVERSIONE%20eq%20'$kVers'%20and%ZPASSWORD%20eq%20'$psw?\$format=json";
+    return await http
+        .get(url, headers: {
+          "authorization": _kAuth,
+          "Accept": "application/json",
+        })
+        .then((response) {
+          return response;
+        })
+        .timeout(Duration(seconds: 20))
+        .catchError((onError) {
+          print(onError.toString());
+        });
+  }
+
   Future<http.Response> getAllAttendances(String fromDay) async {
     final dbUser = await DbManager.getData("user");
-    final user = dbUser.first["username"]; //TODO
+    var user = dbUser.first["username"]; //TODO
     //
     final day = fromDay.substring(0, 10).replaceAll('-', '');
+    // var url =
+    //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
     var url =
-        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_Set?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
 
     return await http
         .get(url, headers: {
@@ -68,6 +97,27 @@ class NetworkManager {
           return response;
         })
         .timeout(Duration(seconds: 10))
+        .catchError((onError) {
+          print(onError.toString());
+        });
+  }
+
+  Future<http.Response> getAllLocations() async {
+    // final dbUser = await DbManager.getData("user");
+    // var user = dbUser.first["username"]; //TODO
+
+    var url =
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/Location_Set";
+
+    return await http
+        .get(url, headers: {
+          "authorization": _kAuth,
+          "Accept": "application/json",
+        })
+        .then((response) {
+          return response;
+        })
+        .timeout(Duration(seconds: 20))
         .catchError((onError) {
           print(onError.toString());
         });
@@ -88,8 +138,9 @@ class NetworkManager {
       }
     };
 
+    // const url = r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY";
     const url =
-        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY";
+        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_Set";
     var tokenResponse = await _getToken(url);
     if (tokenResponse) {
       return await http
@@ -105,7 +156,7 @@ class NetworkManager {
   }
 
   bool _checkResponse(http.Response response) {
-    if (response.statusCode >= 200 || response.statusCode <= 300) {
+    if (response.statusCode >= 200 && response.statusCode <= 300) {
       return true;
     } else {
       return false;

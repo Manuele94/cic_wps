@@ -1,4 +1,4 @@
-import 'package:cic_wps/models/attendanceBTLocation.dart';
+import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceBTLocationCard extends StatefulWidget {
@@ -45,8 +45,6 @@ class _AttendanceBTLocationCardState extends State<AttendanceBTLocationCard> {
   Color _defineColorOfSelectedCardByEvent(BuildContext context) {
     if (widget.isActive == true) {
       return Theme.of(context).accentColor;
-    } else {
-      return Theme.of(context).cardColor;
     }
   }
 

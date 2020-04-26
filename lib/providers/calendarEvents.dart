@@ -130,11 +130,15 @@ class CalendarEvents with ChangeNotifier {
   Future<bool> modifyEventInEvents(
       DateTime selectedDate, CalendarEvent event) async {
     return await NetworkManager().postAttendance(event).then((value) {
-      _events.addAll({
-        selectedDate: [event]
-      });
-      notifyListeners();
-      return true;
+      if (value) {
+        _events.addAll({
+          selectedDate: [event]
+        });
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
     }).catchError((onError) {
       print(onError.toString());
       return false;

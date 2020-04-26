@@ -59,10 +59,12 @@ class _AttendanceNoteFormState extends State<AttendanceNoteForm> {
                       // initialValue: _handleText(),
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.text,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.headline5.color),
                       decoration: InputDecoration(
                           border:
                               UnderlineInputBorder(borderSide: BorderSide.none),
-                          labelStyle: TextStyle(color: Colors.grey),
+                          // labelStyle: TextStyle(color: Colors.grey),
                           hintText: 'Add Note here...',
                           hintStyle: TextStyle(
                             color: Colors.grey,

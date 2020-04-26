@@ -1,42 +1,34 @@
+import 'package:cic_wps/models/sapReturnMessage.dart';
+
 class User {
   final String username;
   final String app;
-  final String company;
-  final String surname;
-  final String name;
-  final String region;
-  final String office;
-  final bool sUser;
+  // final bool sUser;
   final String osSystem;
   final String version;
   String password;
+  // final SapReturnMessage message;
 
-  User(
-      {this.username,
-      this.app,
-      this.company,
-      this.surname,
-      this.name,
-      this.region,
-      this.office,
-      this.password,
-      this.sUser,
-      this.osSystem,
-      this.version});
+  User({
+    this.username,
+    this.app,
+    this.password,
+    // this.sUser,
+    this.osSystem,
+    this.version,
+    // this.message
+  });
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
+    var message = SapReturnMessage.fromJson(parsedJson);
     return User(
       username: parsedJson["d"]["ZUSERNAME"],
       app: parsedJson["d"]["ZAPP"],
-      company: parsedJson["d"]["ZSOCIETA"],
-      surname: parsedJson["d"]["ZCOGNOME"],
-      name: parsedJson["d"]["ZNOME"],
-      region: parsedJson["d"]["ZREGIONE"],
-      office: parsedJson["d"]["ZSEDE"],
       password: parsedJson["d"]["ZPASSWORD"],
-      sUser: parsedJson["d"]["ZSUPER_USER"],
+      // sUser: parsedJson["d"]["ZSUPER_USER"],
       osSystem: parsedJson["d"]["ZOS_CHIAMANTE"],
       version: parsedJson["d"]["ZVERSIONE"],
+      // message: message,
     );
   }
 

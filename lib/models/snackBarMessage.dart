@@ -36,6 +36,40 @@ class SnackBarMessage {
     )..show(context);
   }
 
+  static Flushbar genericSuccess(BuildContext context, String message) {
+    return Flushbar(
+      title: "Great!",
+      message: message,
+      flushbarStyle: FlushbarStyle.FLOATING,
+      flushbarPosition: FlushbarPosition.TOP,
+      borderRadius: 8,
+      margin: EdgeInsets.all(8),
+
+      isDismissible: true,
+      duration: const Duration(seconds: 3),
+      backgroundGradient:
+          LinearGradient(colors: [Colors.green, Colors.greenAccent]),
+      //boxShadows: [BoxShadow(color: Colors.red[800], offset: Offset(0.0, 2.0), blurRadius: 1.0)],
+    )..show(context);
+  }
+
+  static Flushbar genericInfo(BuildContext context, String message) {
+    return Flushbar(
+      title: "Hey!",
+      message: message,
+      flushbarStyle: FlushbarStyle.FLOATING,
+      flushbarPosition: FlushbarPosition.TOP,
+      borderRadius: 8,
+      margin: EdgeInsets.all(8),
+
+      isDismissible: true,
+      duration: const Duration(seconds: 3),
+      backgroundGradient:
+          LinearGradient(colors: [Colors.blue, Colors.blueAccent]),
+      //boxShadows: [BoxShadow(color: Colors.red[800], offset: Offset(0.0, 2.0), blurRadius: 1.0)],
+    )..show(context);
+  }
+
   static Flushbar successfullyAttendanceUpload(BuildContext context) {
     return Flushbar(
       title: "Ok!",

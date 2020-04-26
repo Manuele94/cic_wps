@@ -28,7 +28,7 @@ class _AttendanceTypeCardState extends State<AttendanceTypeCard> {
             splashColor: Theme.of(context).accentColor,
             child: Card(
               color: _defineColorOfSelectedCardByEvent(context),
-              shadowColor: Theme.of(context).accentColor,
+              // shadowColor: Theme.of(context).accentColor,
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -49,8 +49,6 @@ class _AttendanceTypeCardState extends State<AttendanceTypeCard> {
   Color _defineColorOfSelectedCardByEvent(BuildContext context) {
     if (widget.isActive == true) {
       return Theme.of(context).accentColor;
-    } else {
-      return Theme.of(context).cardColor;
     }
   }
 

@@ -60,7 +60,9 @@ class AppTheme {
     scaffoldBackgroundColor: _darkPrimaryVariantColor,
     primarySwatch: _darkPrimarySwatch,
     accentColor: _darkAccentColor,
-    cardColor: Colors.blueGrey.withOpacity(0.7),
+    // cardColor: Colors.white38,
+    cardTheme: CardTheme(
+        color: Colors.grey.shade700, shadowColor: Colors.grey.shade700),
     fontFamily: 'Raleway',
     appBarTheme: AppBarTheme(
       color: _appBarColor,

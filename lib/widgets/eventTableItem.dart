@@ -1,10 +1,10 @@
 import 'package:cic_wps/models/calendarEvent.dart';
-import 'package:cic_wps/providers/calendarEvents.dart';
+import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class EventTableItem extends StatelessWidget {
   final CalendarEvent event;
@@ -14,6 +14,8 @@ class EventTableItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _locationsProvider =
+        Provider.of<AttendanceBTLocations>(context, listen: false);
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -40,7 +42,7 @@ class EventTableItem extends StatelessWidget {
                         fontWeight: FontWeight.w700, color: Colors.white),
                   ),
                   Text(
-                    event.getLocation,
+                    _locationsProvider.getLocationCityByID(event.getLocation),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontWeight: FontWeight.w500, color: Colors.white),

@@ -1,25 +1,27 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 
-class AttendanceBTLocations {
-  List<String> availableBTLocations = [
-    "Milan",
-    "Bergamo",
-    "Rome",
-    "Naples",
-    "Brindisi"
-  ]; //TODO TEST
-  // mettere final
+class AttendanceBtLocation {
+  final String idLocation;
+  final String city;
+  final String plant;
 
-  // AttendanceBTLocations({
-  //   @required this.availableBTLocations,
-  // });
+  AttendanceBtLocation({
+    @required this.idLocation,
+    @required this.city,
+    @required this.plant,
+  });
 
-  // factory AttendanceBTLocations.fromJson(Map<String, dynamic> parsedJson) {
-  //   return new AttendanceBTLocations(
-  //     availableBTLocations: parsedJson["ZLOCATIONS"],//TODO APPARARE
-  //   );
-  // }
+  //GETTERS CLASSICI
+  String get getIdLocation => idLocation.isNotEmpty ? idLocation : "";
+  String get getCity => city.isNotEmpty ? city : "";
+  String get getPlant => plant.isNotEmpty ? plant : "";
 
-//GETTERS CLASSICI
-  List<String> get getLocations => availableBTLocations;
+  factory AttendanceBtLocation.fromJson(Map<String, dynamic> parsedJson) {
+    return AttendanceBtLocation(
+      idLocation: parsedJson["ZID_LOCATION"],
+      city: parsedJson["BEZEI"],
+      plant: parsedJson["ZPLANT"],
+    );
+  }
 }

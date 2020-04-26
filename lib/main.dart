@@ -1,3 +1,5 @@
+import 'package:cic_wps/providers/attendanceBTLocations.dart';
+import 'package:cic_wps/screens/loginPage.dart';
 import 'package:flutter/material.dart';
 import './screens/homePage.dart';
 import './screens/profilePage.dart';
@@ -20,11 +22,12 @@ class MyApp extends StatelessWidget {
         title: 'WorkPlaceStatus',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: HomePage(),
+        home: LoginPage(),
         routes: {
           HomePage.routeName: (ctx) => HomePage(),
           ProfilePage.routeName: (ctx) => ProfilePage(),
           EventDetailPage.routeName: (ctx) => EventDetailPage(),
+          LoginPage.routeName: (ctx) => LoginPage(),
         },
       ),
       providers: [
@@ -33,7 +36,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => SelectedCalendarEventDate(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => AttendanceBTLocations(),
+        ),
       ],
     );
   }

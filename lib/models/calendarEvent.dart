@@ -1,4 +1,3 @@
-import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import '../utilities/attendanceTypeAb.dart';
@@ -26,18 +25,18 @@ class CalendarEvent with ChangeNotifier {
       user: parsedJson["ZUSERNAME"],
       date: parsedJson["ZDATA"],
       holiday: parsedJson["ZFESTIVO"],
-      location: parsedJson["ZLUOGO"],
+      location: parsedJson["ZID_LOCATION"],
       motivation: parsedJson["ZCAUSALE"],
     );
   }
 
 //GETTERS CLASSICI
-  String get getNote => note;
-  String get getUser => user;
-  String get getDate => date;
-  String get getHoliday => holiday;
-  String get getLocation => location;
-  String get getMotivation => motivation;
+  String get getNote => note.isNotEmpty ? note : "";
+  String get getUser => user.isNotEmpty ? user : "";
+  String get getDate => date.isNotEmpty ? date : "";
+  String get getHoliday => holiday.isNotEmpty ? holiday : "";
+  String get getLocation => location.isNotEmpty ? location : "";
+  String get getMotivation => motivation.isNotEmpty ? motivation : "";
 
   bool isEmpty() {
     if (this.note.isEmpty &&
@@ -45,6 +44,19 @@ class CalendarEvent with ChangeNotifier {
         // event.date.isEmpty       ||
         this.holiday.isEmpty &&
         this.location.isEmpty &&
+        this.motivation.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool hasNoLocation() {
+    if (this.note.isEmpty &&
+        this.user.isEmpty &&
+        // event.date.isEmpty       ||
+        this.holiday.isEmpty &&
+        // this.location.isEmpty &&
         this.motivation.isEmpty) {
       return true;
     } else {
@@ -161,11 +173,18 @@ class CalendarEvent with ChangeNotifier {
     }
   }
 
+//FUNZIONE PER CONVERTIRE ID LOCATION IN LOCATION
+
+  String getConvertedLocationById(String id) {}
+
 //FUNZIONE PER CAMBIARE IL CAMPO MOTIVAZIONE DELL'EVENTO
   void setEventMotivation(AttendanceTypeAb newMotivation) {
     if (newMotivation == null) {
       return;
     } else {
+      if (newMotivation != AttendanceTypeAb.BUSINESS_TRIP) {
+        location = ""; //
+      }
       this.motivation = newMotivation.value;
       notifyListeners();
     }
