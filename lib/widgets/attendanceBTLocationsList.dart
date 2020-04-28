@@ -13,8 +13,8 @@ class AttendanceBTLocationsList extends StatefulWidget {
   AttendanceBTLocations _locationsProvider;
   List<String> _cities;
   List<String> _plants;
-  Map<String, String> selectedLocation = {"city": "", "plant": ""};
-  bool _flagFirstPass = false;
+  Map<String, String> selectedLocation;
+  bool _flagFirstPass;
 
   // AttendanceBTLocationsList({@required this.event});
 
@@ -26,9 +26,9 @@ class AttendanceBTLocationsList extends StatefulWidget {
 class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
   @override
   void initState() {
-    //non cambieranno mai
-
-    //widget._plants = widget._locationsProvider.getAllLocationPlants();
+    widget._selectedCityIndex = -1;
+    widget.selectedLocation = {"city": "", "plant": ""};
+    widget._flagFirstPass = false;
 
     super.initState();
   }
@@ -83,7 +83,7 @@ class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
                 }),
           ),
           Visibility(
-            visible: widget._selectedCityIndex != 0,
+            visible: widget._selectedCityIndex >= 0,
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 16,

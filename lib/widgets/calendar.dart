@@ -81,7 +81,7 @@ class _CalendarState extends State<Calendar> {
         },
         initialSelectedDay: _selectedDay,
         startDay: _nowDate.subtract(Duration(days: 30)),
-        endDay: _nowDate.add(Duration(days: 30)),
+        endDay: _nowDate.add(Duration(days: 90)),
         builders: CalendarBuilders(
           singleMarkerBuilder: (context, date, event) {
             CalendarEvent app = event;

@@ -61,7 +61,7 @@ class NetworkManager {
     var user = _authData["id"];
     var psw = _authData["psw"];
     var url =
-        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/LoginSet(ZUSERNAME='$user',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers',ZPASSWORD='$psw')";
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set(ZUSERNAME='$user',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers',ZPASSWORD='$psw')";
     // var url =
     //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set_2?\$filter=ZUSERNAME%20eq%20'$user'%20and%ZAPP%20eq%20'WORKPLACE_STATUS'%20and%ZVERSIONE%20eq%20'$kVers'%20and%ZPASSWORD%20eq%20'$psw?\$format=json";
     return await http
@@ -86,7 +86,7 @@ class NetworkManager {
     // var url =
     //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
     var url =
-        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_Set?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_New_Set?\$filter=ZUSERNAME%20eq%20'$user'%20and%20ZDATA%20eq%20'$day?\$format=json'";
 
     return await http
         .get(url, headers: {
@@ -133,14 +133,14 @@ class NetworkManager {
         'ZDATA': event.date,
         'ZFESTIVO': event.holiday,
         'ZCAUSALE': event.motivation,
-        'ZLUOGO': event.location,
+        'ZID_LOCATION': event.location,
         'ZNOTE': event.note,
       }
     };
 
     // const url = r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY";
     const url =
-        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_Set";
+        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_New_Set";
     var tokenResponse = await _getToken(url);
     if (tokenResponse) {
       return await http

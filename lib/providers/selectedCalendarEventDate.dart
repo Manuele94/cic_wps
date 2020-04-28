@@ -5,7 +5,7 @@ class SelectedCalendarEventDate with ChangeNotifier {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   void selectDay(DateTime day) {
-    _selectedCalendarEventDate =  DateTime(day.year, day.month, day.day);
+    _selectedCalendarEventDate = DateTime(day.year, day.month, day.day);
     notifyListeners();
   }
 

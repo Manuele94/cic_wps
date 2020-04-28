@@ -152,7 +152,7 @@ class CalendarEvents with ChangeNotifier {
     event.setEventMotivation(
         AttendanceTypeAb.FLAG_CANCELLAZIONE); //flag cancellazione per sap
     return await NetworkManager().postAttendance(event).then((value) {
-      if (_events.containsKey(selectedDate)) {
+      if (value && _events.containsKey(selectedDate)) {
         _events[selectedDate].clear();
         notifyListeners();
         return true;
@@ -160,5 +160,9 @@ class CalendarEvents with ChangeNotifier {
         return false;
       }
     });
+  }
+
+  bool isHoliday(DateTime selectedDate) {
+    return _holidays.containsKey(selectedDate);
   }
 }

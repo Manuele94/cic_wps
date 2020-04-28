@@ -27,16 +27,17 @@ class _AttendanceBTLocationCardState extends State<AttendanceBTLocationCard> {
         shadowColor: Theme.of(context).accentColor,
         elevation: 2,
         child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-            child: Column(children: <Widget>[
-              Text(
+            padding: const EdgeInsets.all(5),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
                 widget.text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: _defineColorOfSelectedTextByEvent(context),
                     fontSize: 18),
-              )
-            ])),
+              ),
+            )),
       ),
     );
   }

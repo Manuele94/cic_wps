@@ -5,6 +5,7 @@ import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:cic_wps/utilities/constants.dart';
 import 'package:cic_wps/widgets/eventTable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -42,70 +43,113 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            centerTitle: false,
-            expandedHeight: 100,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'HomePage',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.headline5.color,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
+    return WillPopScope(
+      onWillPop: () {
+        return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  "Confirm Exit",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                content: Text("Are you sure you want to exit?"),
+                actions: <Widget>[
+                  FlatButton(
+                      child: Text(
+                        "YES",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      onPressed: () {
+                        SystemChannels.platform
+                            .invokeListMethod('SystemNavigator.pop');
+                      }),
+                  FlatButton(
+                    child: Text(
+                      "NO",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+        return Future.value(true);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              centerTitle: false,
+              expandedHeight: 100,
+              floating: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  'HomePage',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headline5.color,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
                 ),
               ),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(LineIcons.bell_o),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(LineIcons.bell_o),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(ProfilePage.routeName),
+                ),
+              ],
+              leading: IconButton(
+                icon: Icon(LineIcons.user),
                 onPressed: () =>
                     Navigator.of(context).pushNamed(ProfilePage.routeName),
               ),
-            ],
-            leading: IconButton(
-              icon: Icon(LineIcons.user),
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(ProfilePage.routeName),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: FutureBuilder(
-                future: future,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: loaderSpinner);
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    // if (snapshot.hasData) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Calendar(HomePage.calendarFormat),
-                        EventTable(),
-                      ],
-                    );
-                    // } else if (snapshot.hasError) {
-                    // return Center(
-                    // child: Text(snapshot.error.toString()),
-                    // );
-                  }
-                  // }
-                }),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: FutureBuilder(
+                  future: future,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasError) {
+                      return Center(child: Text(snapshot.error.toString()));
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Calendar(HomePage.calendarFormat),
+                          EventTable(),
+                        ],
+                      );
+                    } else {
+                      return Align(
+                          alignment: Alignment.center,
+                          child: loaderSpinner(context));
+                    }
+                  }),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () =>
+              Navigator.of(context).pushNamed(EventDetailPage.routeName),
+          tooltip: 'Attendance Detail',
+          child: Icon(LineIcons.pencil),
+        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).pushNamed(EventDetailPage.routeName),
-        tooltip: 'Attendance Detail',
-        child: Icon(LineIcons.pencil),
-      ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.,
     );
   }
 
@@ -116,7 +160,7 @@ class _HomePageState extends State<HomePage> {
             .toString();
     try {
       var locationsResponse = await NetworkManager().getAllLocations();
-      if (locationsResponse.statusCode >= 200 ||
+      if (locationsResponse.statusCode >= 200 &&
           locationsResponse.statusCode <= 200) {
         locationsProvider
             .setEventsfromJson(json.decode(locationsResponse.body));
@@ -167,7 +211,7 @@ class _HomePageState extends State<HomePage> {
         .then((ret) {
       if (!ret.didNotificationLaunchApp) {
         var initializationSettingsAndroid =
-            AndroidInitializationSettings('appIcon');
+            AndroidInitializationSettings('app_icon');
         var initializationSettingsIOS = IOSInitializationSettings(
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
         var initializationSettings = InitializationSettings(

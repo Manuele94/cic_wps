@@ -71,12 +71,13 @@ class EventDetailPage extends StatelessWidget {
               children: <Widget>[
                 Calendar(calendarFormat),
                 Visibility(
-                  visible: _selectedDay.isBefore(_nowDate),
+                  visible: ((_selectedDay.isBefore(_nowDate)) ||
+                      _eventsProvider.isHoliday(_selectedDay)),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                       child: Text(
-                        "Changes in the past are not allowed",
+                        "Changes in the past or on Holiday are not allowed",
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -191,23 +192,26 @@ class EventDetailPage extends StatelessWidget {
 
   Future<void> _modifyEvent(CalendarEvents provider, DateTime selDay,
       CalendarEvent modifiedEvent, BuildContext ctx) async {
-    if (modifiedEvent.getLocation.isNotEmpty) {
-      startLoadingSpinner(ctx);
-      try {
-        var resp = await provider.modifyEventInEvents(selDay, modifiedEvent);
-        if (resp) {
-          Navigator.pop(ctx);
-          SnackBarMessage.successfullyAttendanceUpload(ctx);
-        } else {
-          Navigator.pop(ctx);
-          SnackBarMessage.genericError(ctx, "Something went wrong!");
-        }
-      } catch (onError) {
-        Navigator.pop(ctx);
-        SnackBarMessage.genericError(ctx, onError.toString());
-      }
-    } else {
+    if (modifiedEvent.getLocation.isEmpty &&
+        modifiedEvent.getStructuredMotivation() ==
+            AttendanceTypeAb.BUSINESS_TRIP) {
       SnackBarMessage.genericError(ctx, "Please specify the location fields");
+      return;
+    }
+
+    startLoadingSpinner(ctx);
+    try {
+      var resp = await provider.modifyEventInEvents(selDay, modifiedEvent);
+      if (resp) {
+        Navigator.pop(ctx);
+        SnackBarMessage.successfullyAttendanceUpload(ctx);
+      } else {
+        Navigator.pop(ctx);
+        SnackBarMessage.genericError(ctx, "Something went wrong!");
+      }
+    } catch (onError) {
+      Navigator.pop(ctx);
+      SnackBarMessage.genericError(ctx, onError.toString());
     }
   }
 

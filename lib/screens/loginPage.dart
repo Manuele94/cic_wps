@@ -24,8 +24,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _pswController = TextEditingController();
+  // final TextEditingController _idController = TextEditingController();
+  // final TextEditingController _pswController = TextEditingController();
+  String _idText;
+  String _pswText;
   final LocalAuthentication _auth = LocalAuthentication();
   // double _deviceWidth;
   Future<Map> _checkUserInfo;
@@ -36,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     // _deviceWidth = MediaQuery.of(context).size.width;
+    _idText = "";
+    _pswText = "";
     _authData = {"id": "", "psw": ""};
     _checkUserInfo = _checkSavedUserInfo();
     _canCheckBiometrics = _checkBiometrics();
@@ -51,90 +55,116 @@ class _LoginPageState extends State<LoginPage> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 280,
-                  child: Container(
-                    width: double.maxFinite,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        Positioned(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.fitWidth,
-                                  image: AssetImage(
-                                      "assets/images/loginPageBackgroundpng.png"),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  // Container(
+                  //   height: 270,
+                  //   child: Container(
+                  //     width: double.maxFinite,
+                  //     child: Stack(
+                  //       fit: StackFit.expand,
+                  //       children: <Widget>[
+                  //         Positioned(
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.only(top: 20),
+                  //             child: Container(
+                  //               decoration: BoxDecoration(
+                  //                 image: DecorationImage(
+                  //                   fit: BoxFit.fitWidth,
+                  //                   image: AssetImage(
+                  //                       "assets/images/loginPageBackgroundpng.png"),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  Image.asset(
+                    'assets/icon/ClearLogo.png',
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // Padding(
+                  // padding: EdgeInsets.symmetric(horizontal: 20.0),
+
+                  Text(
+                    "WorkPlaceStatus",
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: 35,
+                      fontFamily: "IndieFlower",
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "WorkPlaceStatus",
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                            fontSize: 40,
-                            fontFamily: "IndieFlower",
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        // _pageHandler(context),
-                        FutureBuilder(
-                            future: Future.wait(
-                                [_checkUserInfo, _canCheckBiometrics]),
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                if (snapshot.data[0] == true &&
-                                    snapshot.data[1] == true) {
-                                  // // se ho i dati e posso fare il fastLogin
-                                  return _authUi(snapshot.data[0]["username"]);
-                                } else {
-                                  if (snapshot.data[0] == true &&
-                                      snapshot.data[1] == false) {
-                                    _idController.text =
-                                        snapshot.data[0]["username"];
-                                    _pswController.text =
-                                        snapshot.data[0]["password"];
-                                  } else {
-                                    _idController.text = "";
-                                    _pswController.text = "";
-                                  }
-                                }
-                                return _noAuthUi();
-                              } else {
-                                return loaderSpinner;
-                              }
-                            })
-                      ]),
-                )
-              ],
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // _pageHandler(context),
+                  FutureBuilder(
+                      future:
+                          Future.wait([_checkUserInfo, _canCheckBiometrics]),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        // if (snapshot.hasError &&
+                        //     snapshot.connectionState ==
+                        //         ConnectionState.done) {
+                        //   return Center(
+                        //     child: const Text("Something went Wrong",
+                        //         style: TextStyle(color: Colors.red)),
+                        //   );
+                        // } else
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          var username = snapshot.hasData
+                              ? snapshot.data[0]["username"]
+                              : null;
+                          var password = snapshot.hasData
+                              ? snapshot.data[0]["password"]
+                              : null;
+
+                          if (username != null &&
+                              password != null &&
+                              snapshot.data[1] == true) {
+                            // // se ho i dati e posso fare il fastLogin
+                            // _idController.text = username.toString();
+                            // _pswController.text = password.toString();
+                            _idText = username.toString();
+                            _pswText = password.toString();
+                            return _authUi(username);
+                          } else {
+                            //se non posso usare il fastLogin
+                            if (username != null && snapshot.data[1] == false) {
+                              // _idController.text = username.toString();
+                              _idText = username.toString();
+                            } else {
+                              // _idController.text = "";
+                              // _pswController.text = "";
+                              _idText = "";
+                              _pswText = "";
+                            }
+                          }
+                          return _noAuthUi();
+                        } else {
+                          return Align(
+                              alignment: Alignment.center,
+                              child: loaderSpinner(context));
+                        }
+                      })
+
+                  // )
+                ],
+              ),
             ),
           ),
         ),
@@ -145,27 +175,95 @@ class _LoginPageState extends State<LoginPage> {
   Widget _authUi(String id) {
     return Column(
       children: <Widget>[
-        Text("HI $id"),
-        Center(
-          child: FlatButton(
-            onPressed: () {
-              setState(() {
-                _idController.text = "";
-                _pswController.text = "";
-              });
-            },
-            child: Text(
-              "Not you?",
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Theme.of(context).accentColor,
-              ),
+        Text(
+          "HI $id",
+          style: TextStyle(
+            color: Theme.of(context).accentColor,
+            fontSize: 25,
+            fontFamily: "IndieFlower",
+          ),
+        ),
+        FlatButton(
+          onPressed: () {
+            setState(() {
+              _checkUserInfo = null;
+              _idText = "";
+              _pswText = "";
+              // _idController.text = "";
+              // _pswController.text = "";
+            });
+          },
+          child: Text(
+            "Not you?",
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
             ),
           ),
         ),
         SizedBox(
+          height: 5.0,
+        ),
+        SizedBox(
           height: 10.0,
         ),
+        Container(
+          height: 40,
+          width: double.maxFinite,
+          margin: EdgeInsets.symmetric(horizontal: 70),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Theme.of(context).accentColor,
+          ),
+          child: InkWell(
+            onTap: () {
+              // _authData["psw"] = _pswController.text;
+              // _authData["id"] = _idController.text;
+              _authData["id"] = _idText;
+              _authData["psw"] = _pswText;
+              _pushFastLoginButton(context);
+            },
+            child: Center(
+              child: Text(
+                "Fast Login",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _noAuthUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: Column(children: <Widget>[
+        TextFormField(
+          // initialValue: _idText,
+          // controller: _idController,
+          maxLength: 8,
+          validator: (value) => value.isEmpty ? 'ID cant\' be empty' : null,
+          style: TextStyle(color: Theme.of(context).accentColor),
+          decoration: idInputDecoration(context),
+          onSaved: (value) => _authData["id"] = value.toUpperCase(),
+        ),
+
+        TextFormField(
+          // initialValue: _pswText,
+          // controller: _pswController,
+          obscureText: true,
+          maxLength: 15,
+          validator: (value) =>
+              value.isEmpty ? 'Password cant\'t be empty' : null,
+          style: TextStyle(color: Theme.of(context).accentColor),
+          decoration: pswInputDecoration(context),
+          onSaved: (value) => _authData["psw"] = value,
+        ),
+
+        // SizedBox(
+        //   height: 5.0,
+        // ),
         Center(
           child: FlatButton(
             onPressed: null,
@@ -183,305 +281,62 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Container(
           height: 40,
+          width: double.maxFinite,
           margin: EdgeInsets.symmetric(horizontal: 60),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             color: Theme.of(context).accentColor,
           ),
           child: InkWell(
-            onTap: () => _pushFastLoginButton(context),
-            child: Text(
-              "Fast Login",
-              style: TextStyle(color: Colors.white),
+            onTap: () => _pushLoginButton(context),
+            child: Center(
+              child: Text(
+                "Login",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _noAuthUi() {
-    return Column(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: TextFormField(
-          controller: _idController,
-          maxLength: 8,
-          validator: (value) => value.isEmpty ? 'ID cant\' be empty' : null,
-          style: TextStyle(color: Theme.of(context).accentColor),
-          decoration: idInputDecoration(context),
-          onSaved: (value) => _authData["id"] = value.toUpperCase(),
+        SizedBox(
+          height: 10,
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: TextFormField(
-          controller: _pswController,
-          obscureText: true,
-          maxLength: 15,
-          validator: (value) =>
-              value.isEmpty ? 'Password cant\'t be empty' : null,
-          style: TextStyle(color: Theme.of(context).accentColor),
-          decoration: pswInputDecoration(context),
-          onSaved: (value) => _authData["psw"] = value,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 60),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Divider(height: 5, color: Theme.of(context).accentColor),
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Text("OR",
+                  style: TextStyle(color: Theme.of(context).accentColor)),
+              SizedBox(
+                width: 3,
+              ),
+              Expanded(
+                child: Divider(
+                  height: 5,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      SizedBox(
-        height: 10.0,
-      ),
-      Center(
-        child: FlatButton(
+        Center(
+            child: FlatButton(
           onPressed: null,
           child: Text(
-            "Forgot Password?",
-            textAlign: TextAlign.right,
+            "Create Account",
             style: TextStyle(
               color: Theme.of(context).accentColor,
             ),
           ),
-        ),
-      ),
-      SizedBox(
-        height: 10.0,
-      ),
-      Container(
-        height: 40,
-        width: double.maxFinite,
-        margin: EdgeInsets.symmetric(horizontal: 60),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: Theme.of(context).accentColor,
-        ),
-        child: InkWell(
-          onTap: () => _pushLoginButton(context),
-          child: Center(
-            child: Text(
-              "Login",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 60),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Divider(height: 5, color: Theme.of(context).accentColor),
-            ),
-            SizedBox(
-              width: 3,
-            ),
-            Text("OR", style: TextStyle(color: Theme.of(context).accentColor)),
-            SizedBox(
-              width: 3,
-            ),
-            Expanded(
-              child: Divider(
-                height: 5,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-      Center(
-          child: FlatButton(
-        onPressed: null,
-        child: Text(
-          "Create Account",
-          style: TextStyle(
-            color: Theme.of(context).accentColor,
-          ),
-        ),
-      )),
-    ]);
-  }
-
-  Widget _pageHandler(BuildContext ctx) {
-    // final user = dbUser.first["username"]; //TODO
-    return FutureBuilder(
-        future: Future.wait([_checkUserInfo, _canCheckBiometrics]),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data[0] == true && snapshot.data[1] == true) {
-              // // se ho i dati e posso fare il fastLogin
-              return Column(
-                children: <Widget>[
-                  Text("HI ${snapshot.data[0]["username"]}"),
-                  Center(
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          _idController.text = "";
-                          _pswController.text = "";
-                        });
-                      },
-                      child: Text(
-                        "Not you?",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Center(
-                    child: FlatButton(
-                      onPressed: null,
-                      child: Text(
-                        "Forgot Password?",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Container(
-                    height: 40,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).accentColor,
-                    ),
-                    child: InkWell(
-                      onTap: () => _pushFastLoginButton(context),
-                      child: Text(
-                        "Fast Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              if (snapshot.data[0] == true && snapshot.data[1] == false) {
-                _idController.text = snapshot.data[0]["username"];
-                _pswController.text = snapshot.data[0]["password"];
-              } else {
-                _idController.text = "";
-                _pswController.text = "";
-              }
-            }
-            return Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: TextFormField(
-                  controller: _idController,
-                  maxLength: 8,
-                  validator: (value) =>
-                      value.isEmpty ? 'ID cant\' be empty' : null,
-                  style: TextStyle(color: Theme.of(context).accentColor),
-                  decoration: idInputDecoration(context),
-                  onSaved: (value) => _authData["id"] = value.toUpperCase(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: TextFormField(
-                  controller: _pswController,
-                  obscureText: true,
-                  maxLength: 15,
-                  validator: (value) =>
-                      value.isEmpty ? 'Password cant\'t be empty' : null,
-                  style: TextStyle(color: Theme.of(context).accentColor),
-                  decoration: pswInputDecoration(context),
-                  onSaved: (value) => _authData["psw"] = value,
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Center(
-                child: FlatButton(
-                  onPressed: null,
-                  child: Text(
-                    "Forgot Password?",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Container(
-                height: 40,
-                width: double.maxFinite,
-                margin: EdgeInsets.symmetric(horizontal: 60),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Theme.of(context).accentColor,
-                ),
-                child: InkWell(
-                  onTap: () => _pushLoginButton(context),
-                  child: Center(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Divider(
-                          height: 5, color: Theme.of(context).accentColor),
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text("OR",
-                        style: TextStyle(color: Theme.of(context).accentColor)),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        height: 5,
-                        color: Theme.of(context).accentColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Center(
-                  child: FlatButton(
-                onPressed: null,
-                child: Text(
-                  "Create Account",
-                  style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              )),
-            ]);
-          } else {
-            return loaderSpinner;
-          }
-          //  )};
-        });
+        )),
+      ]),
+    );
   }
 
   Future<bool> _checkBiometrics() async {
@@ -512,8 +367,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<Map> _checkSavedUserInfo() async {
     var empty = Map();
     try {
-      var user = await DbManager.getData("user");
-      return user[0];
+      final dbUser = await DbManager.getData("user");
+      var user = dbUser.first;
+      return user;
     } catch (e) {
       return empty;
     }
@@ -536,9 +392,11 @@ class _LoginPageState extends State<LoginPage> {
             // if (user.password == _pswController.text) {
             await DbManager.insert('user', {
               'id': 0,
-              'username': user.username,
+              // 'username': user.username,
+              'username': _authData["id"],
               'sUser': "",
-              'password': user.password
+              // 'password': user.password
+              'password': _authData["psw"]
             });
             Navigator.pop(ctx);
             Navigator.of(context).pushReplacementNamed(HomePage.routeName);

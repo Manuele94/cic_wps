@@ -28,7 +28,7 @@ class _AttendanceTypeCardState extends State<AttendanceTypeCard> {
             splashColor: Theme.of(context).accentColor,
             child: Card(
               color: _defineColorOfSelectedCardByEvent(context),
-              // shadowColor: Theme.of(context).accentColor,
+              shadowColor: Theme.of(context).accentColor,
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
