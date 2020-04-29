@@ -83,12 +83,12 @@ class EventDetailPage extends StatelessWidget {
                     ),
                   ),
                   replacement: Column(children: <Widget>[
-                    SizedBox(height: 10),
-                    AttendanceTypeRow(),
-                    SizedBox(height: 10),
                     Consumer<CalendarEvent>(
                       builder: (_, eventToModify, __) => Column(
                         children: <Widget>[
+                          SizedBox(height: 10),
+                          AttendanceTypeRow(),
+                          SizedBox(height: 10),
                           Visibility(
                             visible: _changeLocationVisibility(eventToModify),
                             child: AttendanceBTLocationsList(),
@@ -197,6 +197,11 @@ class EventDetailPage extends StatelessWidget {
             AttendanceTypeAb.BUSINESS_TRIP) {
       SnackBarMessage.genericError(ctx, "Please specify the location fields");
       return;
+    }
+    // per fare in modo che venga inviata la location solo in businesstripp
+    if (modifiedEvent.getStructuredMotivation() !=
+        AttendanceTypeAb.BUSINESS_TRIP) {
+      modifiedEvent.clearLocation();
     }
 
     startLoadingSpinner(ctx);

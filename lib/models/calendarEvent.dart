@@ -51,6 +51,19 @@ class CalendarEvent with ChangeNotifier {
     }
   }
 
+  bool isNotEmpty() {
+    if (this.note.isNotEmpty &&
+        this.user.isNotEmpty &&
+        // event.date.isEmpty       ||
+        this.holiday.isNotEmpty &&
+        this.location.isNotEmpty &&
+        this.motivation.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   bool hasNoLocation() {
     if (this.note.isEmpty &&
         this.user.isEmpty &&
@@ -182,9 +195,9 @@ class CalendarEvent with ChangeNotifier {
     if (newMotivation == null) {
       return;
     } else {
-      if (newMotivation != AttendanceTypeAb.BUSINESS_TRIP) {
-        location = ""; //
-      }
+      // if (newMotivation != AttendanceTypeAb.BUSINESS_TRIP) {
+      //   location = ""; //
+      // }
       this.motivation = newMotivation.value;
       notifyListeners();
     }
@@ -206,6 +219,11 @@ class CalendarEvent with ChangeNotifier {
     } else {
       this.location = newLocation;
     }
+  }
+
+// FUNZIONE UTILE PER PULIRE LA LOCATION
+  void clearLocation() {
+    this.location = "";
   }
 
   bool itHoliday() {

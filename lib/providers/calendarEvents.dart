@@ -63,6 +63,15 @@ class CalendarEvents with ChangeNotifier {
     }
   }
 
+  List<CalendarEvent> getEventByDate(DateTime selectedDate) {
+    if (_events.containsKey(selectedDate)) {
+      return _events[selectedDate];
+    } else {
+      List<CalendarEvent> emptyList = [];
+      return [...emptyList];
+    }
+  }
+
 //getter holiday by date. Viene restituita una copia.
 //Se ci sono eventi già inseriti per quella giornata, questi vengono restituiti
 //altrimenti bisogna predisporre l'inserimento di un nuovo elemento

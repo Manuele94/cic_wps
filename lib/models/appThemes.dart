@@ -12,8 +12,8 @@ class AppTheme {
   static const Color _lightPrimaryVariantColor = Color(0XFFFFFFFF);
   static const Color _lightOnPrimaryColor = Colors.black;
 
-  static const Color _darkPrimarySwatch = Colors.red;
-  static const Color _darkAccentColor = Colors.redAccent;
+  static const Color _darkPrimarySwatch = Colors.blue;
+  static const Color _darkAccentColor = Colors.blueAccent;
   static const Color _darkPrimaryVariantColor = Colors.black;
   static const Color _darkOnPrimaryColor = Colors.white;
 
@@ -34,10 +34,10 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: _lightPrimaryVariantColor,
     fontFamily: 'Raleway',
-    // primarySwatch: _lightPrimarySwatch,
-    primaryColor: Color(0XFF002D9C),
-    primaryColorLight: Color(0XFF1C5D99),
-    primaryColorDark: Color(0XFF1C5D99),
+    primarySwatch: _lightPrimarySwatch,
+    // primaryColor: Color(0XFF002D9C),
+    // primaryColorLight: Color(0XFF1C5D99),
+    // primaryColorDark: Color(0XFF1C5D99),
     accentColor: _lightAccentColor,
     // cardColor: _lightOnPrimaryColor.withAlpha(60),
     appBarTheme: AppBarTheme(
