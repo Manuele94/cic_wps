@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cic_wps/models/sapReturnMessage.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
-import 'package:cic_wps/models/user.dart';
+import 'package:cic_wps/screens/credentialsRecoveryPage.dart';
 import 'package:cic_wps/screens/homePage.dart';
 import 'package:cic_wps/singleton/dbManager.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
@@ -10,7 +10,6 @@ import 'package:cic_wps/utilities/constants.dart';
 import 'package:cic_wps/utilities/sapMessageType.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:local_auth/local_auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,12 +23,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // final TextEditingController _idController = TextEditingController();
-  // final TextEditingController _pswController = TextEditingController();
-  String _idText;
-  String _pswText;
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _pswController = TextEditingController();
+  // String _idText;
+  // String _pswText;
   final LocalAuthentication _auth = LocalAuthentication();
-  // double _deviceWidth;
   Future<Map> _checkUserInfo;
   Future<bool> _canCheckBiometrics;
   Map<String, String> _authData;
@@ -37,13 +35,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // _deviceWidth = MediaQuery.of(context).size.width;
-    _idText = "";
-    _pswText = "";
+    // _idText = "";
+    // _pswText = "";
     _authData = {"id": "", "psw": ""};
     _checkUserInfo = _checkSavedUserInfo();
     _canCheckBiometrics = _checkBiometrics();
-    // var futures = useMemoized
+  }
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    _pswController.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,31 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  // Container(
-                  //   height: 270,
-                  //   child: Container(
-                  //     width: double.maxFinite,
-                  //     child: Stack(
-                  //       fit: StackFit.expand,
-                  //       children: <Widget>[
-                  //         Positioned(
-                  //           child: Padding(
-                  //             padding: const EdgeInsets.only(top: 20),
-                  //             child: Container(
-                  //               decoration: BoxDecoration(
-                  //                 image: DecorationImage(
-                  //                   fit: BoxFit.fitWidth,
-                  //                   image: AssetImage(
-                  //                       "assets/images/loginPageBackgroundpng.png"),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Image.asset(
                     'assets/icon/ClearLogo.png',
                     height: 150,
@@ -112,53 +93,39 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  // _pageHandler(context),
                   FutureBuilder(
                       future:
                           Future.wait([_checkUserInfo, _canCheckBiometrics]),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        // if (snapshot.hasError &&
-                        //     snapshot.connectionState ==
-                        //         ConnectionState.done) {
-                        //   return Center(
-                        //     child: const Text("Something went Wrong",
-                        //         style: TextStyle(color: Colors.red)),
-                        //   );
-                        // } else
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          var username = snapshot.hasData
-                              ? snapshot.data[0]["username"]
-                              : null;
-                          var password = snapshot.hasData
-                              ? snapshot.data[0]["password"]
-                              : null;
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          var id = snapshot.data[0]["username"];
+                          var password = snapshot.data[0]["password"];
 
-                          if (username != null &&
-                              password != null &&
-                              snapshot.data[1] == true) {
-                            // // se ho i dati e posso fare il fastLogin
-                            // _idController.text = username.toString();
-                            // _pswController.text = password.toString();
-                            _idText = username.toString();
-                            _pswText = password.toString();
-                            return _authUi(username);
-                          } else {
-                            //se non posso usare il fastLogin
-                            if (username != null && snapshot.data[1] == false) {
-                              // _idController.text = username.toString();
-                              _idText = username.toString();
-                            } else {
-                              // _idController.text = "";
-                              // _pswController.text = "";
-                              _idText = "";
-                              _pswText = "";
-                            }
+                          if (snapshot.data[1] == false && id != null) {
+                            //No Fast Login capability
+                            _idController.text = id;
+                            return _noAuthUi();
                           }
-                          return _noAuthUi();
+
+                          if (id != null && password != null) {
+                            // Fast Login capability
+                            _idController.text = id;
+                            _pswController.text = password;
+                            return _authUi(id);
+                          }
+
+                          if (id == null && password == null) {
+                            //
+                            _idController.text = "";
+                            _pswController.text = "";
+                            return _noAuthUi();
+                          }
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Column();
                         } else {
-                          return Align(
-                              alignment: Alignment.center,
-                              child: loaderSpinner(context));
+                          return _noAuthUi();
                         }
                       })
 
@@ -187,10 +154,10 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             setState(() {
               _checkUserInfo = null;
-              _idText = "";
-              _pswText = "";
-              // _idController.text = "";
-              // _pswController.text = "";
+              // _idText = "";
+              // _pswText = "";
+              _idController.text = "";
+              _pswController.text = "";
             });
           },
           child: Text(
@@ -217,10 +184,10 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: InkWell(
             onTap: () {
-              // _authData["psw"] = _pswController.text;
-              // _authData["id"] = _idController.text;
-              _authData["id"] = _idText;
-              _authData["psw"] = _pswText;
+              _authData["psw"] = _pswController.text;
+              _authData["id"] = _idController.text;
+              // _authData["id"] = _idText;
+              // _authData["psw"] = _pswText;
               _pushFastLoginButton(context);
             },
             child: Center(
@@ -241,34 +208,32 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(children: <Widget>[
         TextFormField(
           // initialValue: _idText,
-          // controller: _idController,
+          controller: _idController,
           maxLength: 8,
           validator: (value) => value.isEmpty ? 'ID cant\' be empty' : null,
           style: TextStyle(color: Theme.of(context).accentColor),
           decoration: idInputDecoration(context),
-          onSaved: (value) => _authData["id"] = value.toUpperCase(),
+          onSaved: (value) =>
+              value.isNotEmpty ? _authData["id"] = value.toUpperCase() : null,
         ),
-
         TextFormField(
           // initialValue: _pswText,
-          // controller: _pswController,
+          controller: _pswController,
           obscureText: true,
           maxLength: 15,
           validator: (value) =>
               value.isEmpty ? 'Password cant\'t be empty' : null,
           style: TextStyle(color: Theme.of(context).accentColor),
           decoration: pswInputDecoration(context),
-          onSaved: (value) => _authData["psw"] = value,
+          onSaved: (value) =>
+              value.isNotEmpty ? _authData["psw"] = value : null,
         ),
-
-        // SizedBox(
-        //   height: 5.0,
-        // ),
         Center(
           child: FlatButton(
-            onPressed: null,
+            onPressed: () => Navigator.of(context)
+                .pushNamed(CredentialsRecoveryPage.routeName),
             child: Text(
-              "Forgot Password?",
+              "Credential Recovery",
               textAlign: TextAlign.right,
               style: TextStyle(
                 color: Theme.of(context).accentColor,
@@ -382,20 +347,18 @@ class _LoginPageState extends State<LoginPage> {
       try {
         var response = await NetworkManager().getForLogin(_authData);
         if (response.statusCode >= 200 && response.statusCode <= 300) {
-          var user = User.fromJson(jsonDecode(response.body));
           var message = SapReturnMessage.fromJson(jsonDecode(response.body));
           if (message.getCode == SapMessageType.E.value ||
-              message.getCode == SapMessageType.W.value) {
+              message.getCode == SapMessageType.W.value ||
+              message.getCode == SapMessageType.O.value) {
             Navigator.pop(ctx);
             return message.returnSnackByMessage(ctx);
           } else {
             // if (user.password == _pswController.text) {
             await DbManager.insert('user', {
               'id': 0,
-              // 'username': user.username,
               'username': _authData["id"],
               'sUser': "",
-              // 'password': user.password
               'password': _authData["psw"]
             });
             Navigator.pop(ctx);

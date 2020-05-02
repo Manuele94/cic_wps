@@ -1,4 +1,5 @@
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
+import 'package:cic_wps/screens/credentialsRecoveryPage.dart';
 import 'package:cic_wps/screens/loginPage.dart';
 import 'package:flutter/material.dart';
 import './screens/homePage.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           ProfilePage.routeName: (ctx) => ProfilePage(),
           EventDetailPage.routeName: (ctx) => EventDetailPage(),
           LoginPage.routeName: (ctx) => LoginPage(),
+          CredentialsRecoveryPage.routeName: (ctx) => CredentialsRecoveryPage(),
         },
       ),
       providers: [

@@ -60,4 +60,22 @@ InputDecoration pswInputDecoration(BuildContext ctx) {
   );
 }
 
+InputDecoration mailInputDecoration(BuildContext ctx) {
+  return InputDecoration(
+    prefixIcon: Icon(
+      LineIcons.envelope_o,
+      color: Colors.grey.shade500,
+    ),
+    labelStyle: TextStyle(color: Theme.of(ctx).accentColor),
+    hintText: "Luca.Rossi-CIC-it@ibm.com",
+    hintStyle: TextStyle(color: Colors.grey),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade500),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(ctx).accentColor),
+    ),
+  );
+}
+
 const kVers = "ET";

@@ -103,11 +103,29 @@ class NetworkManager {
   }
 
   Future<http.Response> getAllLocations() async {
-    // final dbUser = await DbManager.getData("user");
-    // var user = dbUser.first["username"]; //TODO
+    final dbUser = await DbManager.getData("user");
+    var user = dbUser.first["username"]; //TODO
 
     var url =
-        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/Location_Set";
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/Location_Set?\$filter=ZUSERNAME%20eq%20'$user'";
+
+    return await http
+        .get(url, headers: {
+          "authorization": _kAuth,
+          "Accept": "application/json",
+        })
+        .then((response) {
+          return response;
+        })
+        .timeout(Duration(seconds: 20))
+        .catchError((onError) {
+          print(onError.toString());
+        });
+  }
+
+  Future<http.Response> getForCredentials(String mail) async {
+    var url =
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_RECORDING_SRV/Recording_Set(ZEMAIL='$mail')";
 
     return await http
         .get(url, headers: {

@@ -83,10 +83,9 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             });
-        return Future.value(true);
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(

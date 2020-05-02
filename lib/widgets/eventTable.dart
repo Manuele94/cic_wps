@@ -21,8 +21,8 @@ class _EventTableState extends State<EventTable> {
         .getAllEventsCopyByDate(_selectedDay);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _defineTitle(_events),
         Column(

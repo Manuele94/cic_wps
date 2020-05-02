@@ -2,9 +2,8 @@ import 'package:cic_wps/models/calendarEvent.dart';
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:line_icons/line_icons.dart';
 
 class EventTableItem extends StatelessWidget {
   final CalendarEvent event;
@@ -26,35 +25,47 @@ class EventTableItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(17),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Icon(event.getIconByMotivation(), color: Colors.white),
               SizedBox(
-                width: 15,
+                width: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    event.getTextByMotivation(),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700, color: Colors.white),
-                  ),
-                  Text(
-                    _locationsProvider.getLocationCityByID(event.getLocation),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500, color: Colors.white),
-                  ),
-                  Text(
-                    event.getNote,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+              Flexible(
+                // fit: Fl,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(event.getTextByMotivation(),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 15),
+                        overflow: TextOverflow.fade,
+                        softWrap: false),
+                    Text(
+                        _locationsProvider
+                                .getLocationCityByID(event.getLocation) +
+                            " - " +
+                            _locationsProvider
+                                .getLocationPlantByID(event.getLocation),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            fontSize: 13),
+                        overflow: TextOverflow.fade,
+                        softWrap: false),
+                    Text(event.getNote,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        overflow: TextOverflow.fade,
+                        softWrap: false),
+                  ],
+                ),
               ),
-              Spacer(),
+              // Spacer(),
               Icon(LineIcons.ellipsis_v, color: Colors.white),
             ],
           ),

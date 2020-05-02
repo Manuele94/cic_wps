@@ -13,6 +13,7 @@ class AttendanceBTLocationsList extends StatefulWidget {
   List<String> _cities;
   List<String> _plants;
   Map<String, String> selectedLocation = {"city": "", "plant": ""};
+  bool _flagFirstPass = false;
 
   // AttendanceBTLocationsList({@required this.event});
 
@@ -137,7 +138,7 @@ class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
     if (event.getLocation.isEmpty) {
 // Tenendo conto che io sto lavorando su una copia dell'evento controllo che anche l'evento originale sia vuoto
 
-    } else if (event.getLocation.isNotEmpty) {
+    } else if (event.getLocation.isNotEmpty && widget._flagFirstPass == false) {
       //Altrimenti devo decodificare l'id
       //Definisco la città dall'id
       var city =
@@ -158,7 +159,7 @@ class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
           return element == plant;
         });
       }
-      // widget._flagFirstPass = true; // non deve essere rilanciato più volte
+      widget._flagFirstPass = true; // non deve essere rilanciato più volte
     }
 
     //   if (event.getLocation.isNotEmpty && widget._flagFirstPass == false) {

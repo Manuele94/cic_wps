@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:url_launcher/url_launcher.dart';
+// import 'dart:io' show Platform;
 
 class SnackBarMessage {
   static Flushbar wrongPasswordLogin(BuildContext context) {
@@ -64,6 +66,32 @@ class SnackBarMessage {
 
       isDismissible: true,
       duration: const Duration(seconds: 3),
+      backgroundGradient:
+          LinearGradient(colors: [Colors.blue, Colors.blueAccent]),
+      //boxShadows: [BoxShadow(color: Colors.red[800], offset: Offset(0.0, 2.0), blurRadius: 1.0)],
+    )..show(context);
+  }
+
+  static Flushbar obsoleteVersionInfo(BuildContext context, String message) {
+    return Flushbar(
+      title: "Obsolete Version!",
+      message: "Check TestFlight for iOS.\nTap Download for Android",
+      flushbarStyle: FlushbarStyle.FLOATING,
+      flushbarPosition: FlushbarPosition.TOP,
+      borderRadius: 8,
+      margin: EdgeInsets.all(8),
+      mainButton: FlatButton(
+        onPressed: () async {
+          if (await canLaunch(message)) launch(message);
+        },
+        child: Text(
+          "Dowload",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+
+      isDismissible: true,
+      duration: const Duration(seconds: 7),
       backgroundGradient:
           LinearGradient(colors: [Colors.blue, Colors.blueAccent]),
       //boxShadows: [BoxShadow(color: Colors.red[800], offset: Offset(0.0, 2.0), blurRadius: 1.0)],

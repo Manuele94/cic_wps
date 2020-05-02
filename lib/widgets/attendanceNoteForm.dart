@@ -52,6 +52,7 @@ class _AttendanceNoteFormState extends State<AttendanceNoteForm> {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
+                      maxLength: 100,
                       controller: widget._textController,
                       onChanged: (String value) {
                         widget._event.setEventNote(value);

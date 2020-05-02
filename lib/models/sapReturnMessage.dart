@@ -27,11 +27,14 @@ class SapReturnMessage {
       case 'S':
         return SnackBarMessage.genericSuccess(context, this.message);
         break;
-      case 'I':
+      case 'W':
         return SnackBarMessage.genericInfo(context, this.message);
         break;
       case 'E':
         return SnackBarMessage.genericError(context, this.message);
+        break;
+      case 'O':
+        return SnackBarMessage.obsoleteVersionInfo(context, this.message);
         break;
     }
   }
