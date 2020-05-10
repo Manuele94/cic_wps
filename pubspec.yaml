@@ -36,6 +36,8 @@ dependencies:
   flutter_platform_widgets: ^0.32.5
   url_launcher: ^5.4.5
   shared_preferences: ^0.5.7
+  xml2json: ^4.2.0
+
 
 
 dev_dependencies:

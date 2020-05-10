@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-void _showDialog(BuildContext context, Function func, DateTime weekEnd) {
+void showDialogByPlatform(
+    BuildContext context, Function func, DateTime weekEnd) {
   showPlatformDialog(
     context: context,
     builder: (_) => PlatformAlertDialog(

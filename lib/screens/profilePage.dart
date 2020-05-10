@@ -1,4 +1,6 @@
+import 'package:cic_wps/screens/locationChangePage.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -8,17 +10,32 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            centerTitle: false,
-            title: const Text(
-              'Profile',
+      appBar: AppBar(
+        centerTitle: false,
+        elevation: 0,
+        title: Text(
+          'Profile',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).textTheme.headline5.color),
+          textAlign: TextAlign.start,
+        ),
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            leading:
+                Icon(LineIcons.home, color: Theme.of(context).iconTheme.color),
+            title: Text(
+              "Change your Work Place",
               style:
-                  TextStyle(color: Colors.black87, fontWeight: FontWeight.w700),
+                  TextStyle(color: Theme.of(context).textTheme.headline5.color),
+              textAlign: TextAlign.justify,
             ),
-            actions: <Widget>[],
-          )
+            onTap: () =>
+                Navigator.of(context).pushNamed(LocationChangePage.routeName),
+          ),
         ],
       ),
     );

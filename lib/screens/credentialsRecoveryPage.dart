@@ -22,6 +22,7 @@ class CredentialsRecoveryPage extends StatefulWidget {
 class _CredentialsRecoveryPageState extends State<CredentialsRecoveryPage> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _alreadyTapped = true;
 
   @override
   void dispose() {
@@ -77,15 +78,18 @@ class _CredentialsRecoveryPageState extends State<CredentialsRecoveryPage> {
                         fontSize: 10,
                         // fontWeight: FontWeight.w500,
                       )),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () => _sendCredentialRequest(context),
-                          child: Icon(LineIcons.paper_plane,
-                              color: Theme.of(context).accentColor),
-                        ),
-                      ]),
+                  Visibility(
+                    visible: _alreadyTapped,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () => _sendCredentialRequest(context),
+                            child: Icon(LineIcons.paper_plane,
+                                color: Theme.of(context).accentColor),
+                          ),
+                        ]),
+                  ),
                 ]),
           ),
         ),
@@ -113,6 +117,9 @@ class _CredentialsRecoveryPageState extends State<CredentialsRecoveryPage> {
         if (resp.statusCode >= 200 && resp.statusCode <= 300) {
           var message = SapReturnMessage.fromJson(jsonDecode(resp.body));
           Navigator.pop(ctx);
+          setState(() {
+            _alreadyTapped = false;
+          });
           return message.returnSnackByMessage(ctx);
         } else {
           Navigator.pop(ctx);

@@ -1,4 +1,4 @@
-import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class EventTableItem extends StatelessWidget {
               Flexible(
                 // fit: Fl,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Text(event.getTextByMotivation(),
                         textAlign: TextAlign.left,

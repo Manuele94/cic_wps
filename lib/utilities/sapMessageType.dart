@@ -11,4 +11,5 @@ class SapMessageType<String> extends Enum<String> {
   static const SapMessageType W = const SapMessageType("W");
   static const SapMessageType S = const SapMessageType("S");
   static const SapMessageType O = const SapMessageType("O");
+  static const SapMessageType X = const SapMessageType("X");
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cic_wps/models/snackBarMessage.dart';
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
+import 'package:cic_wps/singleton/dbManager.dart';
 import 'package:cic_wps/utilities/constants.dart';
 import 'package:cic_wps/widgets/eventTable.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future future;
+  Future _futureDowload;
+  Future _futureDBDowload;
+  String _userLocation;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
@@ -38,7 +41,9 @@ class _HomePageState extends State<HomePage> {
     final _eventsProvider = Provider.of<CalendarEvents>(context, listen: false);
     final _locationsProvider =
         Provider.of<AttendanceBTLocations>(context, listen: false);
-    future = _downloadInfo(_eventsProvider, _locationsProvider, context);
+    _futureDowload =
+        _downloadInfo(_eventsProvider, _locationsProvider, context);
+    // _futureDBDowload = _getLocationOfBelonging();
   }
 
   @override
@@ -105,29 +110,40 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(LineIcons.bell_o),
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed(ProfilePage.routeName),
+                  icon: Icon(LineIcons.bell_o), color: Colors.grey,
+                  onPressed: () => null,
+                  //Navigator.of(context).pushNamed(ProfilePage.routeName),
                 ),
               ],
               leading: IconButton(
-                icon: Icon(LineIcons.user),
+                icon: Icon(
+                  LineIcons.user,
+                ),
                 onPressed: () =>
                     Navigator.of(context).pushNamed(ProfilePage.routeName),
               ),
             ),
             SliverToBoxAdapter(
               child: FutureBuilder(
-                  future: future,
+                  // future: Future.wait([futureDowload, futureDBDowload]),
+                  future: _futureDowload,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasError) {
-                      return Center(child: Text(snapshot.error.toString()));
+                      return Center(child: Text("Something went wrong!"));
                     } else if (snapshot.connectionState ==
                         ConnectionState.done) {
                       return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
+                          Visibility(
+                            visible: _userLocation != null,
+                            child: Text(
+                              "WorkPlace : $_userLocation",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           Calendar(HomePage.calendarFormat),
                           EventTable(),
                         ],
@@ -158,19 +174,34 @@ class _HomePageState extends State<HomePage> {
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
             .toString();
     try {
+      _userLocation = await _getLocationOfBelonging();
+
+      if (locationsProvider.getAllLocationCities().isNotEmpty) {
+        return;
+      }
       var locationsResponse = await NetworkManager().getAllLocations();
       if (locationsResponse.statusCode >= 200 &&
           locationsResponse.statusCode <= 200) {
         locationsProvider
             .setEventsfromJson(json.decode(locationsResponse.body));
+
+        if (eventProvider.getEvents.isNotEmpty) {
+          return;
+        }
         var response = await NetworkManager().getAllAttendances(date);
         if (response.statusCode >= 200 || response.statusCode <= 200) {
           eventProvider.setEventsfromJson(json.decode(response.body));
         }
       }
     } catch (e) {
+      Navigator.pop(ctx);
       SnackBarMessage.genericError(ctx, "Something went wrong!");
     }
+  }
+
+  Future<String> _getLocationOfBelonging() async {
+    final dbUser = await DbManager.getData("user");
+    return dbUser.first["locationOfBelonging"];
   }
 
   ////////////////NOTIFICATION////////////////////

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
@@ -13,8 +14,8 @@ class DbManager {
     final dbPath = await sql.getDatabasesPath();
     return openDatabase(path.join(dbPath, 'user.db'), onCreate: (db, version) {
       db.execute(
-          'CREATE TABLE user(id TEXT PRIMARY KEY,username TEXT,sUser TEXT,password TEXT)');
-    }, version: 1);
+          'CREATE TABLE user(id TEXT PRIMARY KEY,username TEXT,sUser TEXT,password TEXT,locationOfBelonging TEXT)');
+    }, version: 2);
   }
 
   static Future<void> insert(String table, Map<String, Object> user) async {
@@ -25,6 +26,19 @@ class DbManager {
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DbManager.database();
     return db.query(table);
+  }
+
+  Future<void> modifyUserLocation(String table, String location) async {
+    final dbUser = await getData(table);
+    final user = dbUser.first;
+
+    await DbManager.insert('user', {
+      'id': user["id"],
+      'username': user["username"],
+      'sUser': user["s_User"],
+      'password': user["password"],
+      'locationOfBelonging': location
+    });
   }
 
 //  await DatabaseHandler.insert('user', {

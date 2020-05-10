@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:cic_wps/models/sapReturnMessage.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
+import 'package:cic_wps/models/user.dart';
 import 'package:cic_wps/screens/credentialsRecoveryPage.dart';
 import 'package:cic_wps/screens/homePage.dart';
+import 'package:cic_wps/screens/registrationPage.dart';
 import 'package:cic_wps/singleton/dbManager.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/constants.dart';
@@ -292,7 +294,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Center(
             child: FlatButton(
-          onPressed: null,
+          onPressed: () =>
+              Navigator.of(context).pushNamed(RegistrationPage.routeName),
           child: Text(
             "Create Account",
             style: TextStyle(
@@ -347,6 +350,7 @@ class _LoginPageState extends State<LoginPage> {
       try {
         var response = await NetworkManager().getForLogin(_authData);
         if (response.statusCode >= 200 && response.statusCode <= 300) {
+          var responseUser = User.fromJson(jsonDecode(response.body));
           var message = SapReturnMessage.fromJson(jsonDecode(response.body));
           if (message.getCode == SapMessageType.E.value ||
               message.getCode == SapMessageType.W.value ||
@@ -359,7 +363,8 @@ class _LoginPageState extends State<LoginPage> {
               'id': 0,
               'username': _authData["id"],
               'sUser': "",
-              'password': _authData["psw"]
+              'password': _authData["psw"],
+              'locationOfBelonging': responseUser.getIdLocation
             });
             Navigator.pop(ctx);
             Navigator.of(context).pushReplacementNamed(HomePage.routeName);

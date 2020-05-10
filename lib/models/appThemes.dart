@@ -50,6 +50,7 @@ class AppTheme {
     //   secondary: _lightSecondaryColor,
     //   onPrimary: _lightOnPrimaryColor,
     // ),
+
     iconTheme: IconThemeData(
       color: _lightOnPrimaryColor,
     ),

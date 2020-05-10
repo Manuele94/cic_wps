@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:cic_wps/models/sapReturnMessage.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/attendanceTypeAb.dart';
+import 'package:cic_wps/utilities/sapMessageType.dart';
+import 'package:http/http.dart';
 
-import '../models/calendarEvent.dart';
+import '../providers/calendarEvent.dart';
 import 'package:flutter/material.dart';
 
 class CalendarEvents with ChangeNotifier {
@@ -136,38 +141,44 @@ class CalendarEvents with ChangeNotifier {
 
 //Funzione finalizzata alla modifica di un evento specifico
 // tenendo sempre conto che per ogni giornata è previsto un solo evento
-  Future<bool> modifyEventInEvents(
+  Future<Response> modifyEventInEvents(
       DateTime selectedDate, CalendarEvent event) async {
-    return await NetworkManager().postAttendance(event).then((value) {
-      if (value) {
+    return await NetworkManager().postAttendance(event).then((response) {
+      var message = SapReturnMessage.fromJson(jsonDecode(response.body));
+      if (message.getCode == SapMessageType.S.value) {
         _events.addAll({
           selectedDate: [event]
         });
         notifyListeners();
-        return true;
+        return response;
       } else {
-        return false;
+        return Response("", 400);
       }
     }).catchError((onError) {
       print(onError.toString());
-      return false;
+      return Response("", 400);
     });
   }
 
 //Funzione finalizzata alla cancellazione di un evento specifico
 // tenendo sempre conto che per ogni giornata è previsto un solo evento
-  Future<bool> deleteEventInEvents(
+  Future<Response> deleteEventInEvents(
       DateTime selectedDate, CalendarEvent event) async {
     event.setEventMotivation(
         AttendanceTypeAb.FLAG_CANCELLAZIONE); //flag cancellazione per sap
-    return await NetworkManager().postAttendance(event).then((value) {
-      if (value && _events.containsKey(selectedDate)) {
+    return await NetworkManager().postAttendance(event).then((response) {
+      var message = SapReturnMessage.fromJson(jsonDecode(response.body));
+      if (message.getCode == SapMessageType.S.value) {
         _events[selectedDate].clear();
         notifyListeners();
-        return true;
+        return response;
       } else {
-        return false;
+        return Response("", 400);
       }
+      ;
+    }).catchError((onError) {
+      print(onError.toString());
+      return Response("", 400);
     });
   }
 

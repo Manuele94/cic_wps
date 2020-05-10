@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import '../utilities/attendanceTypeAb.dart';
@@ -24,7 +24,7 @@ class _AttendanceTypeRowState extends State<AttendanceTypeRow> {
     widget._event = Provider.of<CalendarEvent>(context);
     _initRow(widget._event);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -35,7 +35,6 @@ class _AttendanceTypeRowState extends State<AttendanceTypeRow> {
               fontWeight: FontWeight.w500,
               fontSize: 15,
             ),
-            textAlign: TextAlign.left,
           ),
         ),
         SizedBox(height: 10),

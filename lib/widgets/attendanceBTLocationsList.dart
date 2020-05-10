@@ -1,4 +1,4 @@
-import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
@@ -43,7 +43,7 @@ class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
       // padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -54,7 +54,6 @@ class _AttendanceBTLocationsListState extends State<AttendanceBTLocationsList> {
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
               ),
-              textAlign: TextAlign.left,
             ),
           ),
           Container(

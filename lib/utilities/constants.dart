@@ -60,6 +60,24 @@ InputDecoration pswInputDecoration(BuildContext ctx) {
   );
 }
 
+InputDecoration temporaryPswInputDecoration(BuildContext ctx) {
+  return InputDecoration(
+    prefixIcon: Icon(
+      LineIcons.lock,
+      color: Colors.grey.shade500,
+    ),
+    labelStyle: TextStyle(color: Theme.of(ctx).accentColor),
+    hintText: "Temporary Password",
+    hintStyle: TextStyle(color: Colors.grey),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade500),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(ctx).accentColor),
+    ),
+  );
+}
+
 InputDecoration mailInputDecoration(BuildContext ctx) {
   return InputDecoration(
     prefixIcon: Icon(
@@ -68,6 +86,24 @@ InputDecoration mailInputDecoration(BuildContext ctx) {
     ),
     labelStyle: TextStyle(color: Theme.of(ctx).accentColor),
     hintText: "Luca.Rossi-CIC-it@ibm.com",
+    hintStyle: TextStyle(color: Colors.grey),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade500),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(ctx).accentColor),
+    ),
+  );
+}
+
+InputDecoration mailInputDecorationReg(BuildContext ctx) {
+  return InputDecoration(
+    prefixIcon: Icon(
+      LineIcons.envelope_o,
+      color: Colors.grey.shade500,
+    ),
+    labelStyle: TextStyle(color: Theme.of(ctx).accentColor),
+    hintText: "mail@ibm.com",
     hintStyle: TextStyle(color: Colors.grey),
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(color: Colors.grey.shade500),

@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:cic_wps/models/calendarEvent.dart';
-import 'package:cic_wps/providers/calendarEvents.dart';
+import 'package:cic_wps/providers/attendanceBtLocation.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
+import 'package:xml2json/xml2json.dart';
 import 'package:cic_wps/singleton/dbManager.dart';
 import 'package:cic_wps/utilities/constants.dart';
 import 'package:http/http.dart' as http;
@@ -15,12 +16,9 @@ class NetworkManager {
       _singleton; //istanza restituita quando viene chiamata dall'esterno
   NetworkManager._internal(); //viene reso il costruttore disponibile all'esterno
 
-  // var url =
-  //     r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZWKS_PROJECT_001_SRV/ZWKS_MASTERDATA_LOGIN(ZUSERNAME='IT065216',ZAPP='WORKPLACE_STATUS')?$format=json";
-  static const _kAuth = "Basic UkZDSU9TOm1hcmVrMTc=";
+  final xmlConverter = Xml2Json();
 
-  // var urlG =
-  //     r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY";
+  static const _kAuth = "Basic UkZDSU9TOm1hcmVrMTc=";
 
   Map<String, String> headers = {};
 
@@ -30,6 +28,7 @@ class NetworkManager {
           "authorization": _kAuth,
           "x-csrf-token": "Fetch",
           "content-type": "application/json",
+          "accept": "application/json",
         })
         .catchError((onError) {
           print(onError.toString());
@@ -55,9 +54,6 @@ class NetworkManager {
   Future<http.Response> getForLogin(Map<String, String> _authData) async {
     // final dbUser = await DbManager.getData("user");
     // final user = dbUser.first["username"]; //TODO
-    // var url = "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set(ZUSERNAME='${_authData["username"]}',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers')";
-    // var url =
-    //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set?\$filter=ZUSERNAME%20eq%20'${_authData["username"]}'%20and%20ZAPP%20eq%20'WORKPLACE_STATUS?\$format=json')";
     var user = _authData["id"];
     var psw = _authData["psw"];
     var url =
@@ -104,7 +100,7 @@ class NetworkManager {
 
   Future<http.Response> getAllLocations() async {
     final dbUser = await DbManager.getData("user");
-    var user = dbUser.first["username"]; //TODO
+    var user = dbUser.first["username"];
 
     var url =
         "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/Location_Set?\$filter=ZUSERNAME%20eq%20'$user'";
@@ -122,6 +118,25 @@ class NetworkManager {
           print(onError.toString());
         });
   }
+
+  // Future<http.Response> getLocationOfBelonging() async {
+  //   final dbUser = await DbManager.getData("user");
+  //   var user = dbUser.first["username"];
+  //   var url =
+  //       "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/Location_Set?\$filter=ZUSERNAME%20eq%20'$user'";
+  //   return await http
+  //       .get(url, headers: {
+  //         "authorization": _kAuth,
+  //         "Accept": "application/json",
+  //       })
+  //       .then((response) {
+  //         return response;
+  //       })
+  //       .timeout(Duration(seconds: 20))
+  //       .catchError((onError) {
+  //         print(onError.toString());
+  //       });
+  // }
 
   Future<http.Response> getForCredentials(String mail) async {
     var url =
@@ -141,7 +156,7 @@ class NetworkManager {
         });
   }
 
-  Future<bool> postAttendance(CalendarEvent event) async {
+  Future<http.Response> postAttendance(CalendarEvent event) async {
     //TODO
     final dbUser = await DbManager.getData("user");
 
@@ -156,20 +171,106 @@ class NetworkManager {
       }
     };
 
-    // const url = r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZPROVA_TOKEN_SRV/ZWKS_ATTENDANCE_DAY";
     const url =
         r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_ATTENDANCE_SRV/Attendance_New_Set";
     var tokenResponse = await _getToken(url);
     if (tokenResponse) {
+      headers.addAll({
+        "accept": "application/json",
+      });
       return await http
           .post(url, body: json.encode(parameter), headers: headers)
           .then((response) {
-        return _checkResponse(response);
+        print(response.body);
+        return response;
       }).catchError((onError) {
         print(onError.toString());
       }).timeout(Duration(seconds: 10));
     } else {
-      return false;
+      return http.Response("", 400);
+    }
+  }
+
+  Future<http.Response> postLocationOfBelonging(
+      AttendanceBtLocation location) async {
+    //TODO
+    final dbUser = await DbManager.getData("user");
+
+    Map<String, dynamic> parameter = {
+      'd': {
+        'ZUSERNAME': dbUser.first["username"],
+        'ZID_LOCATION': location.getIdLocation,
+      }
+    };
+
+    const url =
+        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOCATION_SRV/New_Location_Set?\$format=json";
+    var tokenResponse = await _getToken(url);
+    if (tokenResponse) {
+      headers.addAll({
+        "accept": "application/json",
+      });
+      return await http
+          .post(url, body: json.encode(parameter), headers: headers)
+          .then((response) {
+        print(response.body);
+        return response;
+      }).catchError((onError) {
+        print(onError.toString());
+      }).timeout(Duration(seconds: 10));
+    } else {
+      return http.Response("", 400);
+    }
+  }
+
+//QUESTO E' IL PRIMO STEP DELLA REGISTRAZIONE. INVIO MAIL CON PASSWORD MOMENTANEA
+  Future<http.Response> getForRegistration(String email) async {
+    var url =
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_RECORDING_SRV/Create_Set(ZEMAIL='$email')";
+
+    return await http
+        .get(url, headers: {
+          "authorization": _kAuth,
+          "Accept": "application/json",
+        })
+        .then((response) {
+          return response;
+        })
+        .timeout(Duration(seconds: 20))
+        .catchError((onError) {
+          print(onError.toString());
+        });
+  }
+
+  Future<http.Response> postForPswUpdate(Map<String, String> _authData) async {
+    var user = _authData["id"];
+    var psw = _authData["psw"];
+
+    Map<String, dynamic> parameter = {
+      'd': {
+        'ZUSERNAME': user,
+        'ZPASSWORD': psw,
+        'ZAPP': "WORKPLACE_STATUS",
+        "ZVERSIONE": kVers,
+      }
+    };
+    const url =
+        r"http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set";
+    var tokenResponse = await _getToken(url);
+    if (tokenResponse) {
+      headers.addAll({
+        "accept": "application/json",
+      });
+      return await http
+          .post(url, body: json.encode(parameter), headers: headers)
+          .then((response) {
+        return response;
+      }).catchError((onError) {
+        print(onError.toString());
+        return http.Response("", 400);
+      }).timeout(Duration(seconds: 10));
+    } else {
+      return http.Response("", 400);
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/eventTableItem.dart';
-import '../models/calendarEvent.dart';
+import '../providers/calendarEvent.dart';
 import 'package:provider/provider.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:cic_wps/providers/selectedCalendarEventDate.dart';

@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:ui';
 
-import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/models/sapReturnMessage.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
 import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/attendanceTypeAb.dart';
 import 'package:cic_wps/utilities/constants.dart';
+import 'package:cic_wps/utilities/sapMessageType.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cic_wps/widgets/attendanceBTLocationsList.dart';
 import 'package:cic_wps/widgets/attendanceNoteForm.dart';
@@ -206,14 +209,10 @@ class EventDetailPage extends StatelessWidget {
 
     startLoadingSpinner(ctx);
     try {
-      var resp = await provider.modifyEventInEvents(selDay, modifiedEvent);
-      if (resp) {
-        Navigator.pop(ctx);
-        SnackBarMessage.successfullyAttendanceUpload(ctx);
-      } else {
-        Navigator.pop(ctx);
-        SnackBarMessage.genericError(ctx, "Something went wrong!");
-      }
+      var response = await provider.modifyEventInEvents(selDay, modifiedEvent);
+      var message = SapReturnMessage.fromJson(jsonDecode(response.body));
+      Navigator.pop(ctx);
+      return message.returnSnackByMessage(ctx);
     } catch (onError) {
       Navigator.pop(ctx);
       SnackBarMessage.genericError(ctx, onError.toString());
@@ -224,14 +223,10 @@ class EventDetailPage extends StatelessWidget {
       CalendarEvent modifiedEvent, BuildContext ctx) async {
     startLoadingSpinner(ctx);
     try {
-      var resp = await provider.deleteEventInEvents(selDay, modifiedEvent);
-      if (resp) {
-        Navigator.pop(ctx);
-        SnackBarMessage.successfullyAttendanceDeleted(ctx);
-      } else {
-        Navigator.pop(ctx);
-        SnackBarMessage.genericError(ctx, "Something went wrong!");
-      }
+      var response = await provider.deleteEventInEvents(selDay, modifiedEvent);
+      var message = SapReturnMessage.fromJson(jsonDecode(response.body));
+      Navigator.pop(ctx);
+      return message.returnSnackByMessage(ctx);
     } catch (onError) {
       Navigator.pop(ctx);
       SnackBarMessage.genericError(ctx, onError.toString());
@@ -308,13 +303,9 @@ class EventDetailPage extends StatelessWidget {
 
     try {
       var response = await NetworkManager().postAttendance(confirmation);
-      if (response) {
-        Navigator.pop(ctx);
-        SnackBarMessage.successfullyAttendanceUpload(ctx);
-      } else {
-        Navigator.pop(ctx);
-        SnackBarMessage.genericError(ctx, "Something went wrong!");
-      }
+      var message = SapReturnMessage.fromJson(jsonDecode(response.body));
+      Navigator.pop(ctx);
+      return message.returnSnackByMessage(ctx);
     } catch (e) {
       SnackBarMessage.genericError(ctx, e.toString());
     }

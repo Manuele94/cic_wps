@@ -1,5 +1,4 @@
-import 'package:cic_wps/models/calendarEvent.dart';
-import 'package:cic_wps/providers/calendarEvents.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +27,7 @@ class _AttendanceNoteFormState extends State<AttendanceNoteForm> {
     _handleText();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
@@ -39,7 +38,6 @@ class _AttendanceNoteFormState extends State<AttendanceNoteForm> {
               fontWeight: FontWeight.w500,
               fontSize: 15,
             ),
-            textAlign: TextAlign.left,
           ),
         ),
         Container(

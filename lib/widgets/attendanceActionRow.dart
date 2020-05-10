@@ -1,8 +1,6 @@
-import 'package:cic_wps/models/calendarEvent.dart';
+import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:cic_wps/providers/calendarEvents.dart';
-import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AttendanceActionRow extends StatefulWidget {
   // AttendanceActionRow({Key key}) : super(key: key);

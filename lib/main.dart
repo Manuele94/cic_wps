@@ -1,6 +1,8 @@
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:cic_wps/screens/credentialsRecoveryPage.dart';
+import 'package:cic_wps/screens/locationChangePage.dart';
 import 'package:cic_wps/screens/loginPage.dart';
+import 'package:cic_wps/screens/registrationPage.dart';
 import 'package:flutter/material.dart';
 import './screens/homePage.dart';
 import './screens/profilePage.dart';
@@ -9,6 +11,8 @@ import './models/appThemes.dart';
 import './providers/calendarEvents.dart';
 import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
 import 'package:provider/provider.dart';
+
+import 'singleton/dbManager.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +34,8 @@ class MyApp extends StatelessWidget {
           EventDetailPage.routeName: (ctx) => EventDetailPage(),
           LoginPage.routeName: (ctx) => LoginPage(),
           CredentialsRecoveryPage.routeName: (ctx) => CredentialsRecoveryPage(),
+          RegistrationPage.routeName: (ctx) => RegistrationPage(),
+          LocationChangePage.routeName: (ctx) => LocationChangePage(),
         },
       ),
       providers: [
