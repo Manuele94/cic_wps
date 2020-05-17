@@ -6,10 +6,16 @@ class AttendanceBTLocations with ChangeNotifier {
   //LIST Avrà per ogni codice [città,cliente,plant]
 
   void setEventsfromJson(Map<String, dynamic> parsedJson) {
+    // if (_availableBTLocationss != null) {
+    //   _availableBTLocationss.clear();
+    // }
+
     final list = parsedJson['d']['results'] as List;
 
     final localLocations =
         list.map((e) => AttendanceBtLocation.fromJson(e)).toList();
+
+    clearAll();
 
     localLocations.forEach((element) {
       _availableBTLocationss.update(element.getIdLocation, (exsistingElement) {
@@ -41,7 +47,7 @@ class AttendanceBTLocations with ChangeNotifier {
   String getLocationPlantByID(String idLocation) {
     if (_availableBTLocationss.containsKey(idLocation)) {
       return _availableBTLocationss[idLocation]
-          .last; //la città è la seconda(nonchè ultima) inserita
+          .last; //la città è la seconda(nonchè ultima) inserita;
     } else {
       return "";
     }
@@ -124,6 +130,10 @@ class AttendanceBTLocations with ChangeNotifier {
       }
     });
     return allPlants;
+  }
+
+  void clearAll() {
+    _availableBTLocationss.clear();
   }
   // List<String> get getLocations => availableBTLocations;
   // List<Map<String,String>>  get getLocations => availableBTLocations;

@@ -25,7 +25,7 @@ class _LocationChangeTypeListState extends State<LocationChangeTypeList> {
     return ListView(shrinkWrap: true, children: <Widget>[
       ListTile(
           title: Text(
-            "At the customer site",
+            "Client site",
             style: TextStyle(
               color: widget.customerButtonSelected
                   ? Theme.of(context).accentColor
@@ -45,7 +45,7 @@ class _LocationChangeTypeListState extends State<LocationChangeTypeList> {
 
           // focusColor: Theme.of(context).accentColor,
           title: Text(
-            "At the IBM site",
+            "IBM site",
             style: TextStyle(
               color: widget.ibmButtonSelected
                   ? Theme.of(context).accentColor

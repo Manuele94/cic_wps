@@ -124,9 +124,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _stepForward() {
-    _emailController.text = "@IBM.COM";
     setState(() {
       if (_currentStep < _stepsLenght - 1) {
+        _emailController.clear();
+        _emailController.text = "Mail@IBM.COM";
         _currentStep++;
       }
     });
@@ -181,8 +182,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
             _authData["psw"] = _newPswController.text;
             var response = await NetworkManager().postForPswUpdate(_authData);
             var message = SapReturnMessage.fromJson(jsonDecode(response.body));
-            Navigator.pop(ctx);
-            return message.returnSnackByMessage(ctx);
+            if (message.getCode == SapMessageType.E.value ||
+                message.getCode == SapMessageType.W.value) {
+              Navigator.pop(ctx);
+              return message.returnSnackByMessage(ctx);
+            } else {
+              Navigator.pop(ctx);
+              Navigator.pop(ctx);
+              return message.returnSnackByMessage(ctx);
+            }
           }
         }
       } catch (error) {
@@ -195,6 +203,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void _stepBackward() {
     setState(() {
       if (_currentStep > 0) {
+        _idController.clear();
+        _tempPswController.clear();
+        _newPswController.clear();
         _currentStep--;
       }
     });
@@ -218,11 +229,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
           isActive: _currentStep == 0 ? true : false,
           title: Text("First Step",
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              )),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).textTheme.headline5.color)),
           content: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FittedBox(
                 child: Row(
@@ -250,12 +261,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 10),
               TextFormField(
                   controller: _emailController,
-                  textAlign: TextAlign.left,
+                  // textAlign: TextAlign.center,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) => _validateMail(value),
                   style: TextStyle(color: Theme.of(context).accentColor),
                   decoration: mailInputDecorationReg(context),
-                  onChanged: (value) => _emailController.text = value),
+                  onSaved: (value) => _emailController.text = value),
               SizedBox(height: 5),
               Text(
                   "You will receive an email with your temporary password needed for the next step.",
@@ -271,27 +282,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
           isActive: _currentStep == 1 ? true : false,
           title: Text("Second Step",
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              )),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).textTheme.headline5.color)),
           content: Column(
             children: [
               TextFormField(
                   controller: _idController,
-                  textAlign: TextAlign.left,
+                  // textAlign: TextAlign.center,
                   validator: (value) =>
                       value.isEmpty ? 'ID cant\' be empty' : null,
                   style: TextStyle(color: Theme.of(context).accentColor),
                   decoration: idInputDecoration(context),
-                  onChanged: (value) => _idController.text = value),
+                  onSaved: (value) => _idController.text = value),
               SizedBox(height: 15),
               TextFormField(
                   controller: _tempPswController,
-                  textAlign: TextAlign.left,
-                  // validator: (value) => _validateMail(value),
+                  // textAlign: TextAlign.center,
+                  validator: (value) =>
+                      value.isEmpty ? "Password can't be empty" : null,
                   style: TextStyle(color: Theme.of(context).accentColor),
                   decoration: temporaryPswInputDecoration(context),
-                  onChanged: (value) => _tempPswController.text = value),
+                  onSaved: (value) => _tempPswController.text = value),
               SizedBox(height: 5),
               Text(
                   "You had this password by mail. It will be valid only for 15 minutes.\nIf it expires, start again the process.",
@@ -302,13 +314,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 10),
               TextFormField(
                   controller: _newPswController,
-                  textAlign: TextAlign.left,
+                  // textAlign: TextAlign.left,
                   // validator: (value) => _validateMail(value),
+                  validator: (value) =>
+                      value.isEmpty ? "Password can't be empty" : null,
                   style: TextStyle(color: Theme.of(context).accentColor),
                   decoration: pswInputDecoration(context),
-                  onChanged: (value) => _newPswController.text = value),
+                  onSaved: (value) => _newPswController.text = value),
               SizedBox(height: 5),
-              Text("This will be your password for daily use.",
+              Text("This one will be your password for daily use.",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Colors.grey
                       // fontWeight: FontWeight.w500,

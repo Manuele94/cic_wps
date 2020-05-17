@@ -35,6 +35,7 @@ class AppTheme {
     scaffoldBackgroundColor: _lightPrimaryVariantColor,
     fontFamily: 'Raleway',
     primarySwatch: _lightPrimarySwatch,
+    brightness: Brightness.dark,
     // primaryColor: Color(0XFF002D9C),
     // primaryColorLight: Color(0XFF1C5D99),
     // primaryColorDark: Color(0XFF1C5D99),
@@ -44,6 +45,8 @@ class AppTheme {
       color: _appBarColor,
       iconTheme: IconThemeData(color: _lightOnPrimaryColor),
     ),
+    cardTheme:
+        CardTheme(color: Colors.white, shadowColor: Colors.grey.shade500),
     // colorScheme: ColorScheme.light(
     //   primary: _lightPrimaryColor,
     //   primaryVariant: _lightPrimaryVariantColor,
@@ -59,11 +62,13 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: _darkPrimaryVariantColor,
+    brightness: Brightness.light,
     primarySwatch: _darkPrimarySwatch,
     accentColor: _darkAccentColor,
     // cardColor: Colors.white38,
     cardTheme: CardTheme(
-        color: Colors.grey.shade700, shadowColor: Colors.grey.shade700),
+        color: Colors.grey.shade600.withOpacity(0.8),
+        shadowColor: Colors.grey.shade700),
     fontFamily: 'Raleway',
     appBarTheme: AppBarTheme(
       color: _appBarColor,

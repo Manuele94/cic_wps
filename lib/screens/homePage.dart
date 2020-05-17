@@ -30,7 +30,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future _futureDowload;
-  Future _futureDBDowload;
   String _userLocation;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
@@ -139,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                           Visibility(
                             visible: _userLocation != null,
                             child: Text(
-                              "WorkPlace : $_userLocation",
+                              " Your WorkPlace : $_userLocation",
                               style: TextStyle(fontWeight: FontWeight.w600),
                               textAlign: TextAlign.center,
                             ),
@@ -181,7 +180,7 @@ class _HomePageState extends State<HomePage> {
       }
       var locationsResponse = await NetworkManager().getAllLocations();
       if (locationsResponse.statusCode >= 200 &&
-          locationsResponse.statusCode <= 200) {
+          locationsResponse.statusCode < 300) {
         locationsProvider
             .setEventsfromJson(json.decode(locationsResponse.body));
 
@@ -189,13 +188,14 @@ class _HomePageState extends State<HomePage> {
           return;
         }
         var response = await NetworkManager().getAllAttendances(date);
-        if (response.statusCode >= 200 || response.statusCode <= 200) {
+        if (response.statusCode >= 200 && response.statusCode < 300) {
           eventProvider.setEventsfromJson(json.decode(response.body));
         }
       }
     } catch (e) {
       Navigator.pop(ctx);
-      SnackBarMessage.genericError(ctx, "Something went wrong!");
+      // SnackBarMessage.genericError(ctx, "Something went wrong!");
+      SnackBarMessage.genericError(ctx, e.toString());
     }
   }
 

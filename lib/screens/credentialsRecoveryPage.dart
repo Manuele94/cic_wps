@@ -41,7 +41,7 @@ class _CredentialsRecoveryPageState extends State<CredentialsRecoveryPage> {
         body: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

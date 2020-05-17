@@ -54,7 +54,7 @@ class _LocationChangePageState extends State<LocationChangePage> {
                     "Finish",
                     style: TextStyle(
                       color: Theme.of(context).accentColor,
-                      fontSize: 15,
+                      fontSize: 18,
                     ),
                   ),
                 ),
@@ -67,7 +67,7 @@ class _LocationChangePageState extends State<LocationChangePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Where you will stay for the next days?",
+              Text("Where will you be for the next days?",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -148,9 +148,16 @@ class _LocationChangePageState extends State<LocationChangePage> {
 
         return message.returnSnackByMessage(ctx);
       } else {
+        var locationsResponse = await NetworkManager().getAllLocations();
+        if (locationsResponse.statusCode >= 200 &&
+            locationsResponse.statusCode < 300) {
+          locationsProvider
+              .setEventsfromJson(json.decode(locationsResponse.body));
+        }
+
         await DbManager().modifyUserLocation("user", convLoc);
         Navigator.pop(ctx);
-        // Navigator.pop(ctx);
+        //Navigator.pop(ctx);
         Navigator.of(context).pushReplacementNamed(HomePage.routeName);
 
         return message.returnSnackByMessage(ctx);

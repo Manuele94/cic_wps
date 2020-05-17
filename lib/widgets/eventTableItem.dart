@@ -72,7 +72,7 @@ class EventTableItem extends StatelessWidget {
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 event.getColorByMotivation(),
-                event.getColorByMotivation().withOpacity(0.5)
+                event.getColorByMotivation().withOpacity(0.7)
               ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               borderRadius: BorderRadius.circular(10)),
         ),

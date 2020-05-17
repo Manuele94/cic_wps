@@ -15,6 +15,10 @@ class DbManager {
     return openDatabase(path.join(dbPath, 'user.db'), onCreate: (db, version) {
       db.execute(
           'CREATE TABLE user(id TEXT PRIMARY KEY,username TEXT,sUser TEXT,password TEXT,locationOfBelonging TEXT)');
+    }, onUpgrade: (db, oldVersion, newVersion) {
+      if (oldVersion < newVersion) {
+        db.execute("ALTER TABLE user ADD COLUMN locationOfBelonging TEXT;");
+      }
     }, version: 2);
   }
 
