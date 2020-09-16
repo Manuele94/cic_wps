@@ -107,13 +107,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(LineIcons.bell_o), color: Colors.grey,
-                  onPressed: () => null,
-                  //Navigator.of(context).pushNamed(ProfilePage.routeName),
-                ),
-              ],
+              // actions: <Widget>[
+              //   IconButton(
+              //     icon: Icon(LineIcons.bell_o), color: Colors.grey,
+              //     onPressed: () => null,
+              //     //Navigator.of(context).pushNamed(ProfilePage.routeName),
+              //   ),
+              // ],
               leading: IconButton(
                 icon: Icon(
                   LineIcons.user,

@@ -119,8 +119,6 @@ class NetworkManager {
         });
   }
 
-  
-
   Future<http.Response> getForCredentials(String mail) async {
     var url =
         "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_RECORDING_SRV/Recording_Set(ZEMAIL='$mail')";
@@ -211,6 +209,31 @@ class NetworkManager {
     var url =
         "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_RECORDING_SRV/Create_Set(ZEMAIL='$email')";
 
+    return await http
+        .get(url, headers: {
+          "authorization": _kAuth,
+          "Accept": "application/json",
+        })
+        .then((response) {
+          return response;
+        })
+        .timeout(Duration(seconds: 20))
+        .catchError((onError) {
+          print(onError.toString());
+        });
+  }
+
+//QUESTO E' IL SECONDO STEP DELLA REGISTRAZIONE. CAMBIO CON PASSWORD MOMENTANEA
+  Future<http.Response> getForRegistrationTemp(
+      Map<String, String> _authData) async {
+    // final dbUser = await DbManager.getData("user");
+    // final user = dbUser.first["username"]; //TODO
+    var user = _authData["id"];
+    var psw = _authData["psw"];
+    var url =
+        "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Initial_Set(ZUSERNAME='$user',ZAPP='WORKPLACE_STATUS',ZVERSIONE='$kVers',ZPASSWORD='$psw')";
+    // var url =
+    //     "http://sap-es.it.ibm.com:8121/sap/opu/odata/sap/ZNAP_LOGIN_SRV/Login_Set_2?\$filter=ZUSERNAME%20eq%20'$user'%20and%ZAPP%20eq%20'WORKPLACE_STATUS'%20and%ZVERSIONE%20eq%20'$kVers'%20and%ZPASSWORD%20eq%20'$psw?\$format=json";
     return await http
         .get(url, headers: {
           "authorization": _kAuth,

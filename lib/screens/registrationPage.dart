@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cic_wps/models/sapReturnMessage.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
@@ -171,7 +170,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _authData["psw"] = _tempPswController.text;
       startLoadingSpinner(ctx);
       try {
-        var response = await NetworkManager().getForLogin(_authData);
+        var response = await NetworkManager().getForRegistrationTemp(_authData);
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           var message = SapReturnMessage.fromJson(jsonDecode(response.body));
           if (message.getCode == SapMessageType.E.value ||
@@ -214,9 +213,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _validateMail(String mail) {
     if (_emailController.text.isEmpty) {
       return 'Mail field cant\'t be empty';
-    } else if (!_emailController.text.toUpperCase().contains("@IBM.COM") &&
-        !_emailController.text.toUpperCase().contains("@IT.IBM.COM")) {
-      return 'Mail must have an IBM domain';
+    } else if (!_emailController.text.toUpperCase().contains("@")) {
+      return 'Mail is not valid';
     } else {
       return null;
     }

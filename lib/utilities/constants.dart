@@ -114,4 +114,4 @@ InputDecoration mailInputDecorationReg(BuildContext ctx) {
   );
 }
 
-const kVers = "ET";
+const kVers = "FLASHDANCE";
