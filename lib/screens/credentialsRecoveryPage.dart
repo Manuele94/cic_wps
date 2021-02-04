@@ -4,10 +4,8 @@ import 'package:cic_wps/models/sapReturnMessage.dart';
 import 'package:cic_wps/models/snackBarMessage.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/constants.dart';
-import 'package:cic_wps/utilities/sapMessageType.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:provider/provider.dart';
 
 class CredentialsRecoveryPage extends StatefulWidget {
   const CredentialsRecoveryPage({Key key}) : super(key: key);

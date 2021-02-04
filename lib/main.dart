@@ -12,8 +12,6 @@ import './providers/calendarEvents.dart';
 import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
 import 'package:provider/provider.dart';
 
-import 'singleton/dbManager.dart';
-
 void main() {
   runApp(MyApp());
 }

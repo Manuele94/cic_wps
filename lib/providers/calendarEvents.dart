@@ -175,7 +175,6 @@ class CalendarEvents with ChangeNotifier {
       } else {
         return Response("", 400);
       }
-      ;
     }).catchError((onError) {
       print(onError.toString());
       return Response("", 400);

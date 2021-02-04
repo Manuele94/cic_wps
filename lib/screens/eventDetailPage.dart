@@ -9,7 +9,6 @@ import 'package:cic_wps/providers/selectedCalendarEventDate.dart';
 import 'package:cic_wps/singleton/networkManager.dart';
 import 'package:cic_wps/utilities/attendanceTypeAb.dart';
 import 'package:cic_wps/utilities/constants.dart';
-import 'package:cic_wps/utilities/sapMessageType.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cic_wps/widgets/attendanceBTLocationsList.dart';
 import 'package:cic_wps/widgets/attendanceNoteForm.dart';
