@@ -1,6 +1,5 @@
 import 'package:cic_wps/providers/calendarEvent.dart';
 import 'package:cic_wps/providers/attendanceBTLocations.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
@@ -9,7 +8,7 @@ class EventTableItem extends StatelessWidget {
   final CalendarEvent event;
   void selectItem() {}
 
-  EventTableItem({@required this.event});
+  EventTableItem({required this.event});
 
   @override
   Widget build(BuildContext context) {

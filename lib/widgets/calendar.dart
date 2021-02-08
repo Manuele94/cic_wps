@@ -100,13 +100,10 @@ class _CalendarState extends State<Calendar> {
     switch (cF) {
       case CalendarFormat.month:
         return 'Month';
-        break;
       case CalendarFormat.week:
         return 'Week';
-        break;
       case CalendarFormat.twoWeeks:
         return '2 weeks';
-        break;
       default:
         return 'Month';
     }

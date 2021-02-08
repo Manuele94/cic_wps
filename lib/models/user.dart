@@ -9,13 +9,13 @@ class User {
   // final SapReturnMessage message;
 
   User({
-    this.username,
-    this.app,
-    this.password,
+    required this.username,
+    required this.app,
+    required this.password,
     // this.sUser,
-    this.osSystem,
-    this.version,
-    this.locationOfBelonging,
+    required this.osSystem,
+    required this.version,
+    required this.locationOfBelonging,
     // this.message
   });
 

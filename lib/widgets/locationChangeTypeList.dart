@@ -9,10 +9,10 @@ class LocationChangeTypeList extends StatefulWidget {
   Function ibmButtonSelectedAction;
 
   LocationChangeTypeList({
-    @required this.customerButtonSelected,
-    @required this.customerButtonSelectedAction,
-    @required this.ibmButtonSelected,
-    @required this.ibmButtonSelectedAction,
+    required this.customerButtonSelected,
+    required this.customerButtonSelectedAction,
+    required this.ibmButtonSelected,
+    required this.ibmButtonSelectedAction,
   });
 
   @override

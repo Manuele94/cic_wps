@@ -11,12 +11,12 @@ class CalendarEvent with ChangeNotifier {
   String motivation;
 
   CalendarEvent({
-    @required this.note,
-    @required this.user,
-    @required this.date,
-    @required this.holiday,
-    @required this.location,
-    @required this.motivation,
+    required this.note,
+    required this.user,
+    required this.date,
+    required this.holiday,
+    required this.location,
+    required this.motivation,
   });
 
   factory CalendarEvent.fromJson(Map<String, dynamic> parsedJson) {
@@ -188,7 +188,7 @@ class CalendarEvent with ChangeNotifier {
 
 //FUNZIONE PER CONVERTIRE ID LOCATION IN LOCATION
 
-  String getConvertedLocationById(String id) {}
+  // String getConvertedLocationById(String id) {}
 
 //FUNZIONE PER CAMBIARE IL CAMPO MOTIVAZIONE DELL'EVENTO
   void setEventMotivation(AttendanceTypeAb newMotivation) {

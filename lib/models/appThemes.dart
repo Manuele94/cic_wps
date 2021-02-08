@@ -6,13 +6,14 @@ class AppTheme {
   // static Color _iconColor = Colors.blueAccent.shade200;
   static Color _appBarColor = Colors.transparent;
 
-  static const Color _lightPrimarySwatch = Colors.blue;
-  // static const Color _lightAccentColor = Colors.blueAccent;
-  static const Color _lightAccentColor = Color(0XFF1C5D99);
+  // static const Color _lightPrimarySwatch = Colors.blue;
+  static const MaterialColor _lightPrimarySwatch = Colors.blue;
+  static const Color _lightAccentColor = Colors.blueAccent;
+
   static const Color _lightPrimaryVariantColor = Color(0XFFFFFFFF);
   static const Color _lightOnPrimaryColor = Colors.black;
 
-  static const Color _darkPrimarySwatch = Colors.blue;
+  static const MaterialColor _darkPrimarySwatch = Colors.blue;
   static const Color _darkAccentColor = Colors.blueAccent;
   static const Color _darkPrimaryVariantColor = Colors.black;
   static const Color _darkOnPrimaryColor = Colors.white;

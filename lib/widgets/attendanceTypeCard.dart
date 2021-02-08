@@ -7,10 +7,10 @@ class AttendanceTypeCard extends StatefulWidget {
   final Function onTapAction;
 
   AttendanceTypeCard(
-      {@required this.isActive,
-      @required this.icon,
-      @required this.text,
-      @required this.onTapAction});
+      {required this.isActive,
+      required this.icon,
+      required this.text,
+      required this.onTapAction});
   // AttendanceType({@required this.buttonTypeEvent, @required this.event});
 
   @override

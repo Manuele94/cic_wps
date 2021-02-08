@@ -1,4 +1,3 @@
-import 'package:cic_wps/providers/attendanceBTLocations.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceBTLocationCard extends StatefulWidget {
@@ -7,9 +6,9 @@ class AttendanceBTLocationCard extends StatefulWidget {
   final Function onTapAction;
   // AttendanceBTLocationItem({Key key}) : super(key: key);
   AttendanceBTLocationCard(
-      {@required this.isActive,
-      @required this.text,
-      @required this.onTapAction});
+      {required this.isActive,
+      required this.text,
+      required this.onTapAction});
 
   @override
   _AttendanceBTLocationCardState createState() =>

@@ -8,10 +8,10 @@ class AttendanceBtLocation with ChangeNotifier {
   final String customer;
 
   AttendanceBtLocation({
-    @required this.idLocation,
-    @required this.city,
-    @required this.plant,
-    @required this.customer,
+    required this.idLocation,
+    required this.city,
+    required this.plant,
+    required this.customer,
   });
 
   //GETTERS CLASSICI

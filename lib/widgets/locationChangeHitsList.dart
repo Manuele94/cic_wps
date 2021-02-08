@@ -13,8 +13,8 @@ class LocationChangeHitsList extends StatefulWidget {
   int _selectedIndex;
 
   LocationChangeHitsList({
-    @required this.customerButtonSelected,
-    @required this.ibmButtonSelected,
+    required this.customerButtonSelected,
+    required this.ibmButtonSelected,
     // @required this.selectedLocation,
   });
 

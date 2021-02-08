@@ -56,11 +56,11 @@ class UserDB with ChangeNotifier {
   }
 
   //funzione inversa
-  UserDB toUserDB(Map<String, dynamic> map) {
-    this._id = map["id"];
-    this._username = map["username"];
-    this._sUser = map["sUser"];
-    this._password = map["password"];
-    this._locationOfBelonging = map["userLocation"];
-  }
+  // UserDB toUserDB(Map<String, dynamic> map) {
+  //   this._id = map["id"];
+  //   this._username = map["username"];
+  //   this._sUser = map["sUser"];
+  //   this._password = map["password"];
+  //   this._locationOfBelonging = map["userLocation"];
+  // }
 }

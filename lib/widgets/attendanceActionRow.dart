@@ -10,9 +10,9 @@ class AttendanceActionRow extends StatefulWidget {
   Function(CalendarEvents provider, DateTime day, CalendarEvent eventMod) save;
 
   AttendanceActionRow(
-      {@required this.eventModified,
-      @required this.delete,
-      @required this.save});
+      {required this.eventModified,
+      required this.delete,
+      required this.save});
 
   @override
   _AttendanceActionRowState createState() => _AttendanceActionRowState();

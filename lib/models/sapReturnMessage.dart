@@ -7,8 +7,8 @@ class SapReturnMessage {
   final String message;
 
   SapReturnMessage({
-    this.code,
-    this.message,
+    required this.code,
+    required this.message,
   });
 
   factory SapReturnMessage.fromJson(Map<String, dynamic> parsedJson) {
@@ -26,16 +26,15 @@ class SapReturnMessage {
     switch (code) {
       case 'S':
         return SnackBarMessage.genericSuccess(context, this.message);
-        break;
       case 'W':
         return SnackBarMessage.genericInfo(context, this.message);
-        break;
       case 'E':
         return SnackBarMessage.genericError(context, this.message);
-        break;
       case 'O':
         return SnackBarMessage.obsoleteVersionInfo(context, this.message);
-        break;
+      default:
+        return SnackBarMessage.genericInfo(context, this.message);        
     }
+    
   }
 }
